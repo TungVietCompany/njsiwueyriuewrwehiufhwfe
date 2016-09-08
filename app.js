@@ -8,6 +8,7 @@ server.listen(process.env.PORT || 3000);
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+var bpurle= bodyParser.urlencoded({ extended: false })
 console.log("Server is running on port 3000");
 var fs = require('fs');
 var mkdirp = require('mkdirp');
@@ -23,17 +24,28 @@ app.get('/checkUserExits/:username',function (req,res) {
     userController.checkUserExits(req.params.username,res);
 });
 
+app.post('/booxtown/rest/user/signup_ios',function (req,res) {
+    userController.signup(req.query,res);
+});
+
 app.post('/booxtown/rest/user/signup',function (req,res) {
+    console.log(req.body);
     userController.signup(req.body,res);
 });
 
 app.post('/booxtown/rest/user/login',function (req,res) {
+
     userController.login(req.query,res);
 });
 
 app.post('/booxtown/rest/user/getprofile',function (req,res) {
     userController.getUserInforById(req.query.session_id,res);
 });
+
+app.post('/booxtown/rest/user/updateprofile_ios',function (req,res) {
+    userController.updateUserInforById_ios(req.query,res);
+});
+
 
 app.post('/booxtown/rest/user/updateprofile',function (req,res) {
     userController.updateUserInforById(req.query.session_id,req.body,res);
@@ -55,6 +67,10 @@ app.post('/booxtown/rest/user/forgotpassword',function (req,res) {
 
 app.post('/booxtown/rest/book/addbook',function (req,res) {
     bookController.addBook(req.query.session_id,req.body,res);
+});
+
+app.post('/booxtown/rest/book/addbook_ios',function (req,res) {
+    bookController.addBook_ios(req.query,res);
 });
 
 app.post('/booxtown/rest/book/getinfo',function (req,res) {
@@ -92,8 +108,8 @@ var storage = multer.diskStorage({
 app.post('/', multer({
     storage: storage
 }).single('upload'), function(req, res) {
-    //console.log(req.body.name);
-    return res.status(204).end();
+    //cons;ole.log(req.body.name);
+    res.json({code:200});
 });
 
 app.get('/uploads/:file1/:file2', function (req, res){

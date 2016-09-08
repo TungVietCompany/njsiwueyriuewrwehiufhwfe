@@ -16,6 +16,19 @@ function addBook(session_id,book,res) {
     });
 }
 
+function addBook_ios(book,res) {
+    bookDao.addBook_ios(book,connection,function (response) {
+        if(response != 701)
+        {
+            res.json(new ResponseData(200, "Thêm mới thành công", ""));
+        }
+        else
+        {
+            res.json(new ResponseData(701, "Thêm mới thất bại", ""));
+        }
+    });
+}
+
 function getBookInfoById(book,res) {
     bookDao.getBookInfoById(book,connection,function (response) {
         if(response != 701)
@@ -50,6 +63,7 @@ function getAllBookByUserId(session_id,res) {
     });
 }
 
+module.exports.addBook_ios = addBook_ios;
 module.exports.getAllBookByUserId = getAllBookByUserId;
 module.exports.getBookInfoById = getBookInfoById;
 module.exports.addBook = addBook;

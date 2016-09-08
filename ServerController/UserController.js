@@ -39,6 +39,7 @@ function signup(user, res) {
 //Login
 
 function login(user, res) {
+
     userDao.userLogin(user, connection, function (response) {
         if (response != 701) {
             res.json(new ResponseData(200, "Đăng nhập thành công", response));
@@ -75,6 +76,18 @@ function getUserInforById(session_id, res) {
 //Update user info
 function updateUserInforById(session_id, user, res) {
     userDao.updateUserInfo(session_id, user, connection, function (response) {
+        if (response != 701) {
+            res.json(new ResponseData(200, "Cập nhật thông tin thành công", ""));
+        }
+        else {
+            res.json(new ResponseData(701, "Cập nhật thông tin thất bại", ""));
+        }
+    });
+}
+
+//Update user info
+function updateUserInforById_ios(user, res) {
+    userDao.updateUserInfo_ios(user, connection, function (response) {
         if (response != 701) {
             res.json(new ResponseData(200, "Cập nhật thông tin thành công", ""));
         }
@@ -127,6 +140,7 @@ function checkUserExits(username, res) {
     });
 }
 
+module.exports.updateUserInforById_ios = updateUserInforById_ios;
 module.exports.userLogout = userLogout;
 module.exports.changePassword = changePassword;
 module.exports.updateUserInforById = updateUserInforById;

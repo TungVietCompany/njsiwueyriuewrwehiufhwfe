@@ -25,6 +25,31 @@ function addBook(session_id,book,connection,callback) {
     });
 }
 
+function addBook_ios(book,connection,callback) {
+    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
+        if(response != 701)
+        {
+            var query = "call sp_insert_book('" + md5.getMD5ByTime(book.title) + "','"
+                + book.title + "','" + book.author + "','"
+                + book.photo + "','" + book.hash_tag + "'," + book.location_longitude + ","
+                + book.location_latitude + ",'"+book.genre+"','"+ book.b_condition +"','"+book.b_action+"'" +
+                ",0,NOW(),'"+response+"')";
+            connection.query(query
+                , function (err, rows) {
+                    if (err) {
+
+                        callback(701);
+                    }
+                    callback(200);
+                });
+        }
+        else
+        {
+            callback(701);
+        }
+    });
+}
+
 function getBookInfoById(book,connection,callback) {
     sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
         if(response != 701)
@@ -65,6 +90,7 @@ function getAllBookByUserId(session_id,connection,callback) {
     });
 }
 
+module.exports.addBook_ios = addBook_ios;
 module.exports.getAllBookByUserId = getAllBookByUserId;
 module.exports.getBookInfoById = getBookInfoById;
 module.exports.addBook = addBook;
