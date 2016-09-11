@@ -30,12 +30,13 @@ function checkUserExits(username, connection, callback) {
 }
 
 function insertUserSession(user_id, connection, callback) {
-    connection.query("call sp_insertUserSession('" + md5.getMD5ByTime('') + "','" + user_id + "','','')"
+    var session_id = md5.getMD5ByTime(user_id);
+    connection.query("call sp_insertUserSession('" + md5.getMD5ByTime('') + "','" + user_id + "','"+session_id+"','')"
         , function (err, rows) {
             if (err) {
                 callback(701);
             }
-            callback(200);
+            callback(session_id);
         });
 }
 
@@ -162,6 +163,8 @@ function userLogout(user,connection,callback) {
     });
 }
 
+
+module.exports.updateUserInfo_ios = updateUserInfo_ios;
 //DungNS 11-9-2016
 
 function User_Delete(userid, connection, callback){
