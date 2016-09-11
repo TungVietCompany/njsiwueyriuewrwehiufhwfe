@@ -1,6 +1,14 @@
 var userController = require('./ServerController/UserController');
 var bookController = require('./ServerController/BookController');
 var emailController = require('./ServerController/EmailController');
+var commentController = require('./ServerController/CommentController');
+var postController = require('./ServerController/PostController');
+var threadController = require('./ServerController/ThreadController');
+var topicController = require('./ServerController/TopicController');
+var transHisController = require('./ServerController/TransacHistoryController');
+var bookDAO = require('./DAO/BookDAO');
+var connection = require('./DatabaseConnection/MysqlConnection');
+
 var express = require('express');
 var app = express();
 var server = require("http").createServer(app);
@@ -65,7 +73,342 @@ app.post('/booxtown/rest/book/getallbook',function (req,res) {
     bookController.getAllBookByUserId(req.query.session_id,res);
 });
 
+//DungNS 11-9-2016 -------------------
 
+app.get('/booxtown/book/book_getall', function(req, res){
+     bookController.Book_GetAll(res);
+});
+
+app.get('/booxtown/book/book_delete', function(req, res){
+    bookController.Book_Delete(req.query.bookid, res);
+});
+
+app.get('/booxtown/book/book_filter', function(req, res){
+    bookController.Book_Filter(req.query.bookid, req.query.title, req.query.author, req.query.photo, req.query.hashTag,
+        req.query.locationLongitude, req.query.locationLatitude, req.query.genre, req.query.bookCondition,
+        req.query.action, req.query.isDeleted, req.query.createDate, req.query.userID, req.query.price, res);
+});
+
+app.get('/booxtown/book/book_getbyauthor', function(req, res){
+    bookController.Book_GetByAuthor(req.query.author, res);
+});
+
+app.get('/booxtown/book/book_getbydate', function(req, res){
+    bookController.Book_GetByDate(req.query.fromdate, req.query.todate, res);
+});
+
+app.get('/test', function(req, res){
+    res.send(req.query.fromdate + req.query.todate);
+});
+
+app.get('/booxtown/book/book_getbydeleted', function(req, res){
+    bookController.Book_GetByDeleted(req.query.isdeleted, res);
+});
+
+app.get('/booxtown/book/book_getbyid', function(req, res){
+    bookController.Book_GetByID(req.query.bookid, res);
+});
+
+app.get('/booxtown/book/book_getbyprice', function(req, res){
+    bookController.Book_GetByPrice(req.query.minprice, req.query.maxprice, res);
+});
+
+app.get('/booxtown/book/book_getbytitle', function(req, res){
+    bookController.Book_GetByTitle(req.query.title, res);
+});
+
+app.get('/booxtown/book/book_getbyuserid', function(req, res){
+    bookController.Book_GetByUserID(req.query.userid, res);
+});
+
+app.get('/booxtown/book/book_getbyusersession', function(req, res){
+    bookController.Book_GetByUserSession(req.query.session_id, res);
+});
+
+app.get('/booxtown/book/book_insert', function(req, res){
+    bookController.Book_Insert(req.query.bookid, req.query.title, req.query.author, req.query.photo, req.query.hashTag,
+        req.query.locationLongitude, req.query.locationLatitude, req.query.genre, req.query.bookCondition,
+        req.query.action, req.query.isDeleted, req.query.createDate, req.query.userID, req.query.price, res);
+});
+
+app.get('/booxtown/book/book_search', function(req, res){
+    bookController.Book_Search(req.query.titleKeyword, req.query.authorKeyword, req.query.hashtagKeyword,
+        req.query.photoKeyword, req.query.genreKeyword, res);
+});
+
+app.get('/booxtown/book/book_update', function(req, res){
+    bookController.Book_Update(req.query.bookid, req.query.title, req.query.author, req.query.photo, req.query.hashTag,
+        req.query.locationLongitude, req.query.locationLatitude, req.query.genre, req.query.bookCondition,
+        req.query.action, req.query.isDeleted, req.query.createDate, req.query.userID, req.query.price, res);
+});
+
+app.get('/booxtown/comment/comment_delete', function(req, res){
+    commentController.Comment_Delete(req.query.commentid, res);
+});
+
+app.get('/booxtown/comment/comment_filter', function(req, res){
+    commentController.Comment_Filter(req.query.commentid, req.query.createDate, req.query.threadid,
+        req.query.userid, res);
+});
+
+app.get('/booxtown/comment/comment_getall', function(req, res){
+    commentController.Comment_GetAll(res);
+});
+
+app.get('/booxtown/comment/comment_getbydate', function(req, res){
+    commentController.Comment_GetByDate(req.query.fromdate, req.query.todate, res);
+});
+
+app.get('/booxtown/comment/comment_getbyid', function(req, res){
+    commentController.Comment_GetByID(req.query.commentid, res);
+});
+
+app.get('/booxtown/comment/comment_getbythread', function(req, res){
+    commentController.Comment_GetByThread(req.query.threadid, res);
+});
+
+app.get('/booxtown/comment/comment_getbyuser', function(req, res){
+    commentController.Comment_GetByUser(req.query.userid, res);
+});
+
+app.get('/booxtown/comment/comment_insert', function(req, res){
+    commentController.Comment_Insert(req.query.commentid, req.query.content, req.query.createDate, req.query.threadid,
+        req.query.userid, res);
+});
+
+app.get('/booxtown/comment/comment_update', function(req, res){
+    commentController.Comment_Update(req.query.commentid, req.query.content, req.query.createDate, req.query.threadid,
+        req.query.userid, res);
+});
+
+app.get('/booxtown/post/post_delete', function(req, res){
+    postController.Post_Delete(req.query.postid, res);
+});
+
+app.get('/booxtown/post/post_filter', function(req, res){
+    postController.Post_Filter(req.query.postid, req.query.createDate, req.query.userid, res);
+});
+
+app.get('/booxtown/post/post_getall', function(req, res){
+    postController.Post_GetAll(res);
+});
+
+app.get('/booxtown/post/post_getbyauthor', function(req, res){
+    postController.Post_GetByAuthor(req.query.author, res);
+});
+
+app.get('/booxtown/post/post_getbydate', function(req, res){
+    postController.Post_GetByDate(req.query.fromdate, req.query.todate, res);
+});
+
+app.get('/booxtown/post/post_getbyid', function(req, res){
+    postController.Post_GetByID(req.query.postid, res);
+});
+
+app.get('/booxtown/post/post_getbytitle', function(req, res){
+    postController.Post_GetByTitle(req.query.title, res);
+});
+
+app.get('/booxtown/post/post_getbyuserid', function(req, res){
+    postController.Post_GetByUserID(req.query.userid, res);
+});
+
+app.get('/booxtown/post/post_getbyusersession', function(req, res){
+    postController.Post_GetByUserSession(req.query.session_id, res);
+});
+
+app.get('/booxtown/post/post_insert', function(req, res){
+    postController.Post_Insert(req.query.postid, req.query.title, req.query.author, req.query.comment,
+        req.query.createDate, req.query.userid, res);
+});
+
+app.get('/booxtown/post/post_search', function(req, res){
+    postController.Post_Search(req.query.authorkeyword, req.query.commentkeyword, res);
+});
+
+app.get('/booxtown/post/post_update', function(req, res){
+    postController.Post_Update(req.query.postid, req.query.title, req.query.author, req.query.comment,
+        req.query.createDate, req.query.userid, res);
+});
+
+app.get('/booxtown/thread/thread_delete', function(req, res){
+    threadController.Thread_Delete(req.query.threadid, res);
+});
+
+app.get('/booxtown/thread/thread_filter', function(req, res){
+    threadController.Thread_Filter(req.query.threadid, req.query.title, req.query.createDate, req.query.topicID, res);
+});
+
+app.get('/booxtown/thread/thread_getall', function(req, res){
+    threadController.Thread_GetAll(res);
+});
+
+app.get('/booxtown/thread/thread_getbydate', function(req, res){
+    threadController.Thread_GetByDate(req.query.fromdate, req.query.todate, res);
+});
+
+app.get('/booxtown/thread/thread_getbyid', function(req, res){
+    threadController.Thread_GetByID(req.query.threadid, res);
+});
+
+app.get('/booxtown/thread/thread_getbytopic', function(req, res){
+    threadController.Thread_GetByTopic(req.query.topicid, res);
+});
+
+app.get('/booxtown/thread/thread_insert', function(req, res){
+    threadController.Thread_Insert(req.query.threadid, req.query.title, req.query.description, req.query.createDate,
+        req.query.topicid, res);
+});
+
+app.get('/booxtown/thread/thread_search', function(req, res){
+    threadController.Thread_Search(req.query.titleKeyword, req.query.descrKeyword, res);
+});
+
+app.get('/booxtown/thread/thread_update', function(req, res){
+    threadController.Thread_Update(req.query.threadid, req.query.title, req.query.description, req.query.createDate,
+        req.query.topicid, res);
+});
+
+app.get('/booxtown/topic/topic_delete', function(req, res){
+    topicController.Topic_Delete(req.query.topicid, res);
+});
+
+app.get('/booxtown/topic/topic_filter', function(req, res){
+    topicController.Topic_Filter(req.query.topicid, req.query.title, req.query.createDate, req.query.userid, res);
+});
+
+app.get('/booxtown/topic/topic_getall', function(req, res){
+    topicController.Topic_GetAll(res);
+});
+
+app.get('/booxtown/topic/topic_getbydate', function(req, res){
+    topicController.Topic_GetByDate(req.query.fromdate, req.query.todate, res);
+});
+
+app.get('/booxtown/topic/topic_getbyid', function(req, res){
+    topicController.Topic_GetByID(req.query.topicid, res);
+});
+
+app.get('/booxtown/topic/topic_getbyuserid', function(req, res){
+    topicController.Topic_GetByUserID(req.query.userid, res);
+});
+
+app.get('/booxtown/topic/topic_getbyusersession', function(req, res){
+    topicController.Topic_GetByUserSession(req.query.session_id, res);
+});
+
+app.get('/booxtown/topic/topic_insert', function(req, res){
+    topicController.Topic_Insert(req.query.topicid, req.query.title, req.query.description, req.query.createDate,
+        req.query.userid, res);
+});
+
+app.get('/booxtown/topic/topic_search', function(req, res){
+    topicController.Topic_Search(req.query.titlekeyword, req.query.descrkeyword, res);
+});
+
+app.get('/booxtown/topic/topic_update', function(req, res){
+    topicController.Topic_Update(req.query.topicid, req.query.title, req.query.description, req.query.createDate,
+        req.query.userid, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_delete', function(req, res){
+    transHisController.TransacHistory_Delete(req.query.tranhisid, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_filter', function(req, res){
+    transHisController.TransacHistory_Filter(req.query.transHisID, req.query.buyUserID, req.query.sellUserID,
+        req.query.createDate, req.query.buyBookID, req.query.sellBookID, req.query.action,
+        req.query.isAccepted, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_getall', function(req, res){
+    transHisController.TransacHistory_GetAll(res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_getbyid', function(req, res){
+    transHisController.TransacHistory_GetById(req.query.tranhisid, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_getbydate', function(req, res){
+    transHisController.TransacHistory_GetByDate(req.query.fromdate, req.query.todate, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_getbyuser', function(req, res){
+    transHisController.TransacHistory_GetByUser(req.query.buyuserid, req.query.selluserid, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_getbybook', function(req, res){
+    transHisController.TransacHistory_GetByBook(req.query.buybookid, req.query.sellbookid, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_getbyaccepted', function(req, res){
+    transHisController.TransacHistory_GetByAccepted(req.query.isaccepted, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_insert', function(req, res){
+    transHisController.TransacHistory_Insert(req.query.tranHisID, req.query.buyUserID, req.query.sellUserID,
+        req.query.createDate, req.query.buyBookID, req.query.sellBookID,
+        req.query.action, req.query.isAccepted, res);
+});
+
+app.get('/booxtown/transactionhistory/tranhis_update', function(req, res){
+    transHisController.TransacHistory_Update(req.query.tranHisID, req.query.buyUserID, req.query.sellUserID,
+        req.query.createDate, req.query.buyBookID, req.query.sellBookID,
+        req.query.action, req.query.isAccepted, res);
+});
+
+app.get('/booxtown/user/user_delete', function(req, res){
+    userController.User_Delete(req.query.userid, res);
+});
+
+app.get('/booxtown/user/user_filter', function(req, res){
+    userController.User_Filter(req.query.userid, req.query.firstName, req.query.lastName, req.query.userName,
+        req.query.birthDay, req.query.phone, req.query.isDeleted, req.query.createDate, res);
+});
+
+app.get('/booxtown/user/user_getall', function(req, res){
+    userController.User_GetAll(res);
+});
+
+app.get('/booxtown/user/user_getbydeleted', function(req, res){
+    userController.User_GetByDeleted(req.query.isdeleted, res);
+});
+
+app.get('/booxtown/user/user_getbyactive', function(req, res){
+    userController.User_GetByActive(req.query.isactive, res);
+});
+
+app.get('/booxtown/user/user_getbyid', function(req, res){
+    userController.User_GetByID(req.query.userid, res);
+});
+
+app.get('/booxtown/user/user_getbyusername', function(req, res){
+    userController.User_GetByUserName(req.query.username, res);
+});
+
+app.get('/booxtown/user/user_getbyusersession', function(req, res){
+    userController.User_GetByUserSession(req.query.session_id, res);
+});
+
+app.get('/booxtown/user/user_insert', function(req, res){
+    userController.User_Insert(req.query.userid, req.query.firstName, req.query.lastName, req.query.userName,
+        req.query.mail, req.query.birthDay, req.query.phone, req.query.password, req.query.isDeleted,
+        req.query.isActive, req.query.createDate, res);
+});
+
+app.get('/booxtown/user/user_update', function(req, res){
+    userController.User_Update(req.query.userid, req.query.firstName, req.query.lastName, req.query.userName,
+        req.query.mail, req.query.birthDay, req.query.phone, req.query.password, req.query.isDeleted,
+        req.query.isActive, req.query.createDate, res);
+});
+
+app.get('/booxtown/user/user_updatebyusersession', function(req, res){
+    userController.User_UpdateByUserSession(req.query.session_id, req.query.firstName, req.query.lastName, req.query.userName,
+        req.query.mail, req.query.birthDay, req.query.phone, req.query.password, req.query.isDeleted,
+        req.query.isActive, req.query.createDate, res);
+});
+
+//---------------------
 
 //Upload Image
 var storage = multer.diskStorage({

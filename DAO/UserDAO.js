@@ -162,6 +162,167 @@ function userLogout(user,connection,callback) {
     });
 }
 
+//DungNS 11-9-2016
+
+function User_Delete(userid, connection, callback){
+    connection.query("call User_Delete('" + userid + "')", function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows.affectedRows);
+        }
+    });
+}
+
+function User_Filter(userid, firstName, lastName, userName, birthDay, phone, isDeleted,
+        createDate, connection, callback){
+    var _isDeleted;
+    if(!isDeleted)
+        _isDeleted = 'null';
+    else if(isDeleted == 0)
+        _isDeleted = 'false';
+    else
+        _isDeleted = 'true';
+
+    var query = "call User_Filter('" + userid ? userid : 'null' + "', '" + firstName ? firstName : 'null'
+        + "', '" + lastName ? lastName : 'null' + "', '" + userName ? userName : 'null' + "', '"
+        + birthDay ? birthDay : 'null' + "', '" + phone ? phone : 'null' + "', " + _isDeleted + ", '"
+        + createDate ? createDate : 'null' + "')";
+    connection.query(query, function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows[0]);
+        }
+    });
+}
+
+function User_GetAll(connection, callback){
+    connection.query("call User_GetAll()", function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows[0]);
+        }
+    });
+}
+
+function User_GetByDeleted(isDeleted, connection, callback){
+    connection.query("call User_GetByDeleted('" + isDeleted + "')", function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows[0]);
+        }
+    });
+}
+
+function User_GetByActive(isActive, connection, callback){
+    connection.query("call User_GetByActive('" + isActive + "')", function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows[0]);
+        }
+    });
+}
+
+function User_GetByID(userID, connection, callback){
+    connection.query("call User_GetById('" + userID + "')", function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows[0]);
+        }
+    });
+}
+
+function User_GetByUserName(userName, connection, callback){
+    connection.query("call User_GetByUserName('" + userName + "')", function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows[0]);
+        }
+    });
+}
+
+function User_GetByUserSession(session_id, connection, callback){
+    sessionDao.getUserIdBySessionId(session_id, connection, function(response){
+        if(response != 701){
+            connection.query("call User_GetById('" + response + "')", function(err, rows){
+                if(err){
+                    callback(701);
+                }
+                else{
+                    callback(rows[0]);
+                }
+            });
+        }
+        else
+            callback(701);
+    });
+}
+
+function User_Insert(userid, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
+        isActive, createDate, connection, callback){
+    //isDeleted, isActive: int
+    var query = "call User_Insert('" + userid + "', '" + firstName + "', '" + lastName + "', '" + userName + "', '"
+        + mail + "', '" + birthDay + "', '" + phone + "', '" + password + "', "
+        + isDeleted  + ", " + isActive + ", '" + createDate + "')";
+    connection.query(query, function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows.affectedRows);
+        }
+    });
+}
+
+function User_Update(userid, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
+         isActive, createDate, connection, callback){
+    //isDeleted, IsActive: int
+    var query = "call User_Update('" + userid + "', '" + firstName + "', '" + lastName + "', '" + userName + "', '"
+    + mail + "', '" + birthDay + "', '" + phone + "', '" + password + "', "
+    + isDeleted + ", " + isActive + ", '" + createDate + "')";
+    connection.query(query, function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows.affectedRows);
+        }
+    });
+}
+
+function User_UpdateByUserSession(session_id, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
+        isActive, createDate, connection, callback){
+    sessionDao.getUserIdBySessionId(session_id, connection, function(response){
+        if(response != 701){
+            connection.query("call User_Update('" + userid + "', '" + firstName + "', '" + lastName + "', '" + userName + "', '"
+            + mail + "', '" + birthDay + "', '" + phone + "', '" + password + "', "
+            + isDeleted + ", " + isActive + ", '" + createDate + "')", function(err, rows){
+                if(err){
+                    callback(701);
+                }
+                else{
+                    callback(rows[0]);
+                }
+            });
+        }
+        else
+            callback(701);
+    });
+}
+
 module.exports.userLogout = userLogout;
 module.exports.changePassword = changePassword;
 module.exports.updateUserInfo = updateUserInfo;
@@ -170,3 +331,13 @@ module.exports.userLogin = userLogin;
 module.exports.insertUser = insertUser;
 module.exports.checkUserExits = checkUserExits;
 module.exports.insertUserSession = insertUserSession;
+module.exports.User_Delete = User_Delete;
+module.exports.User_Filter = User_Filter;
+module.exports.User_GetAll = User_GetAll;
+module.exports.User_GetByDeleted = User_GetByDeleted;
+module.exports.User_GetByID = User_GetByID;
+module.exports.User_GetByUserName = User_GetByUserName;
+module.exports.User_GetByUserSession = User_GetByUserSession;
+module.exports.User_Insert = User_Insert;
+module.exports.User_Update = User_Update;
+module.exports.User_UpdateByUserSession = User_UpdateByUserSession;
