@@ -163,8 +163,6 @@ function userLogout(user,connection,callback) {
     });
 }
 
-
-module.exports.updateUserInfo_ios = updateUserInfo_ios;
 //DungNS 11-9-2016
 
 function User_Delete(userid, connection, callback){
