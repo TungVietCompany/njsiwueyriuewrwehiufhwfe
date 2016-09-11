@@ -1,6 +1,7 @@
 var userController = require('./ServerController/UserController');
 var bookController = require('./ServerController/BookController');
 var emailController = require('./ServerController/EmailController');
+var MD5 = require('./Library/MD5');
 var express = require('express');
 var app = express();
 var server = require("http").createServer(app);
@@ -29,7 +30,6 @@ app.post('/booxtown/rest/user/signup_ios',function (req,res) {
 });
 
 app.post('/booxtown/rest/user/signup',function (req,res) {
-    console.log(req.body);
     userController.signup(req.body,res);
 });
 
@@ -84,26 +84,47 @@ app.post('/booxtown/rest/book/getallbook',function (req,res) {
 
 
 //Upload Image
+// var storage = multer.diskStorage({
+//     destination: function (req, file, callback) {
+//         var forderName = file.originalname.split("::");
+//         var link = './Images/'+forderName[0];
+//         try {
+//             var stats = fs.lstatSync(link);
+//
+//         }
+//         catch (err)
+//         {
+//             mkdirp(link);
+//         }
+//         callback(null, link);
+//     },
+//     filename: function(req, file, cb ) {
+//         console.log(file.originalname.split("::")[1]);
+//         return cb(null, file.originalname.split("::")[1]);
+//
+//     }
+// });
+
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        var forderName = file.originalname.split("::");
-        var link = './Images/'+forderName[0];
-        try {
-            var stats = fs.lstatSync(link);
-
-        }
-        catch (err)
-        {
-            mkdirp(link);
-        }
-        callback(null, link);
+        // var forderName = file.originalname.split("::");
+        // var link = './Images/'+forderName[0];
+        // try {
+        //     var stats = fs.lstatSync(link);
+        //
+        // }
+        // catch (err)
+        // {
+        //     mkdirp(link);
+        // }
+        // callback(null, link);
     },
     filename: function(req, file, cb ) {
-        console.log(file.originalname.split("::")[1]);
-        return cb(null, file.originalname.split("::")[1]);
+        return cb(null, file.originalname);
 
     }
 });
+
 
 app.post('/', multer({
     storage: storage
@@ -112,12 +133,11 @@ app.post('/', multer({
     res.json({code:200});
 });
 
-app.get('/uploads/:file1/:file2', function (req, res){
+app.get('/booxtown/rest/getImage', function (req, res){
     try {
-        file = req.params.file1;
-        file2 = req.params.file2;
+        file = req.query.image;
         var dirname = "./Images/";
-        var img = fs.readFileSync(dirname + file +'/'+ file2 );
+        var img = fs.readFileSync(dirname + file );
         res.writeHead(200, {'Content-Type': 'image/png' });
         res.end(img, 'binary');
     }
