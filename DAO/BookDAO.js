@@ -9,7 +9,7 @@ function addBook(book,connection,callback) {
                 + book.title + "','" + book.author + "','"
                 + book.photo + "','" + book.hash_tag + "'," + book.location_longitude + ","
                 + book.location_latitude + ",'"+book.genre+"','"+ book.b_condition +"','"+book.b_action+"'" +
-                ",0,NOW(),'"+response+"')";
+                ",0,NOW(),'"+response+"'," + book.price +")";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
