@@ -30,12 +30,13 @@ function checkUserExits(username, connection, callback) {
 }
 
 function insertUserSession(user_id, connection, callback) {
-    connection.query("call sp_insertUserSession('" + md5.getMD5ByTime('') + "','" + user_id + "','','')"
+    var session_id = md5.getMD5ByTime(user_id);
+    connection.query("call sp_insertUserSession('" + md5.getMD5ByTime('') + "','" + user_id + "','"+session_id+"','')"
         , function (err, rows) {
             if (err) {
                 callback(701);
             }
-            callback(200);
+            callback(session_id);
         });
 }
 
@@ -87,8 +88,8 @@ function getUserInforById(user_id,connection,callback) {
         });
 }
 
-function updateUserInfo(session_id,user,connection,callback) {
-    sessionDao.getUserIdBySessionId(session_id,connection,function (response) {
+function updateUserInfo(user,connection,callback) {
+    sessionDao.getUserIdBySessionId(user.session_id,connection,function (response) {
         if(response != 701)
         {
             connection.query("call sp_updateUser('" + response + "','" + user.first_name + "','" + user.last_name + "','"
