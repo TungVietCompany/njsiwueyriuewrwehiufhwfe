@@ -16,8 +16,8 @@ function Thread_Delete(threadid, res){
     });
 }
 
-function Thread_Filter(threadid, title, createDate, topicID, res){
-    threadDao.Thread_Filter(threadid, title, createDate, topicID, connection, function(response){
+function Thread_Filter(thread, res){
+    threadDao.Thread_Filter(thread, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -61,12 +61,12 @@ function Thread_GetByTopic(topicid, res){
     });
 }
 
-function Thread_Insert(threadid, title, description, createDate, topicid, res){
-    threadDao.Thread_Insert(threadid, title, description, createDate, topicid, connection, function(response){
+function Thread_Insert(thread, res){
+    threadDao.Thread_Insert(thread, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
-            res.json(response);
+            res.json(new ResponseData(200, "Success!", ""));
     });
 }
 
@@ -79,8 +79,8 @@ function Thread_Search(titleKeyword, descrKeyword, res){
     });
 }
 
-function Thread_Update(threadid, title, description, createDate, topicid, res){
-    threadDao.Thread_Update(threadid, title, description, createDate, topicid, connection, function(response){
+function Thread_Update(thread, res){
+    threadDao.Thread_Update(thread, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else

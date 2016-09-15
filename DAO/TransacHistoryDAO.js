@@ -16,23 +16,13 @@ function TransacHistory_Delete(transHisid, connection, callback){
     });
 }
 
-function TransacHistory_Filter(transHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID, action, isAccepted
-        , connection, callback){
-    var _isDeleted;
-    if(!isDeleted)
-        _isDeleted = 'null';
-    else if(isDeleted == 0)
-        _isDeleted = 'false';
-    else
-        _isDeleted = 'true';
-
-    var query = "call Book_Filter('" + bookid ? bookid : 'null' + "', '" + title ? title : 'null'
-    + "', '" + author ? author : 'null' + "', '" + photo ? photo : 'null' + "', '"
-    + hashTag ? hashTag : 'null' + "', " + locationLongitude ? locationLongitude : 'null' + ", "
-    + locationLatitude ? locationLatitude : 'null' + ", '" + genre ? genre : 'null' + "', '"
-    + bookCondition ? bookCondition : 'null' + "', '" + action ? action : 'null' + "', "
-    + _isDeleted + ", '" + createDate ? createDate : 'null' + "', '" + userID ? userID : 'null' + "', "
-    + price ? price : 'null' + ")";
+function TransacHistory_Filter(transHis, connection, callback){
+    var query = "call Book_Filter('" + (transHis.bookid ? transHis.bookid : 'null') + "', '" + (transHis.title ? transHis.title : 'null')
+    + "', '" + (transHis.author ? transHis.author : 'null') + "', '" + (transHis.photo ? transHis.photo : 'null') + "', '"
+    + (transHis.hashTag ? transHis.hashTag : 'null') + "', " + (transHis.locationLongitude ? transHis.locationLongitude : 'null') + ", "
+    + (transHis.locationLatitude ? transHis.locationLatitude : 'null') + ", '" + (transHis.createDate ? transHis.createDate : 'null') + "', '"
+    + (transHis.bookCondition ? transHis.bookCondition : 'null') + "', '" + (transHis.action ? transHis.action : 'null') + "', "
+    + (transHis.isDeleted ? transHis.isDeleted : 'null') + ")";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -62,8 +52,8 @@ function TransacHistory_GetById(transHisID, connection, callback){
 }
 
 function TransacHistory_GetByDate(fromDate, toDate, connection, callback){
-    connection.query("call TransacHistory_GetByDate('" + fromDate ? fromDate : 'null' + "', '"
-    + toDate ? toDate : 'null' + "')", function(err, rows){
+    connection.query("call TransacHistory_GetByDate('" + (fromDate ? fromDate : 'null') + "', '"
+    + (toDate ? toDate : 'null') + "')", function(err, rows){
         if(err)
             callback(701);
         else
@@ -72,8 +62,8 @@ function TransacHistory_GetByDate(fromDate, toDate, connection, callback){
 }
 
 function TransacHistory_GetByUser(buyUserID, sellUserID, connection, callback){
-    connection.query("call TransacHistory_GetByUser('" + buyUserID ? buyUserID : 'null' + "', '"
-    + sellUserID ? sellUserID : 'null' + "')", function(err, rows){
+    connection.query("call TransacHistory_GetByUser('" + (buyUserID ? buyUserID : 'null') + "', '"
+    + (sellUserID ? sellUserID : 'null') + "')", function(err, rows){
         if(err)
             callback(701);
         else
@@ -82,8 +72,8 @@ function TransacHistory_GetByUser(buyUserID, sellUserID, connection, callback){
 }
 
 function TransacHistory_GetByBook(buyBookID, sellBookID, connection, callback){
-    connection.query("call TransacHistory_GetByBook('" + buyBookID ? buyBookID : 'null' + "', '"
-    + sellBookID ? sellBookID : 'null' + "')", function(err, rows){
+    connection.query("call TransacHistory_GetByBook('" + (buyBookID ? buyBookID : 'null') + "', '"
+    + (sellBookID ? sellBookID : 'null') + "')", function(err, rows){
         if(err)
             callback(701);
         else
@@ -101,10 +91,10 @@ function TransacHistory_GetByAccepted(isAccepted, connection, callback){
     });
 }
 
-function TransacHistory_Insert(tranHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID,
-        action, isAccepted, connection, callback){
-    var query = "call TransacHistory_Insert('" + tranHisID + "', '" + buyUserID + "', '" + sellUserID + "', '"
-        + createDate + "', '" + buyBookID + "', '" + sellBookID + "', '" + action + "', " + isAccepted + ")";
+function TransacHistory_Insert(tranHis, connection, callback){
+    var query = "call TransacHistory_Insert('" + transHis.tranHisID + "', '" + transHis.buyUserID + "', '"
+        + transHis.sellUserID + "', '" + transHis.createDate + "', '" + transHis.buyBookID + "', '"
+        + transHis.sellBookID + "', '" + transHis.action + "', " + transHis.isAccepted + ")";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -115,10 +105,10 @@ function TransacHistory_Insert(tranHisID, buyUserID, sellUserID, createDate, buy
     });
 }
 
-function TransacHistory_Update(tranHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID,
-        action, isAccepted, connection, callback){
-    var query = "call TransacHistory_Update('" + tranHisID + "', '" + buyUserID + "', '" + sellUserID + "', '"
-        + createDate + "', '" + buyBookID + "', '" + sellBookID + "', '" + action + "', " + isAccepted + ")";
+function TransacHistory_Update(tranHis, connection, callback){
+    var query = "call TransacHistory_Update('" + transHis.tranHisID + "', '" + transHis.buyUserID + "', '"
+        + transHis.sellUserID + "', '" + transHis.createDate + "', '" + transHis.buyBookID + "', '" + transHis.sellBookID
+        + "', '" + transHis.action + "', " + transHis.isAccepted + ")";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);

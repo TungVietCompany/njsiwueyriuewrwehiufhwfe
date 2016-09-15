@@ -89,14 +89,12 @@ function Book_Delete(bookid, res){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
-            res.json(response);
+            res.json(new ResponseData(200, "Success!", ""));
     });
 }
 
-function Book_Filter(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-    genre, bookCondition, action, isDeleted, createDate, userID, price, res){
-    bookDao.Book_Filter(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-        genre, bookCondition, action, isDeleted, createDate, userID, price, connection, function(response){
+function Book_Filter(book, res){
+    bookDao.Book_Filter(book, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -185,20 +183,8 @@ function Book_GetByUserSession(session_id, res){
     });
 }
 
-function Book_Insert(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-        genre, bookCondition, action, isDeleted, createDate, userID, price, res){
-    bookDao.Book_Insert(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-        genre, bookCondition, action, isDeleted, createDate, userID, connection, function(response){
-            if(response == 701)
-                res.json(new ResponseData(701, "Error!", ""));
-            else
-                res.json(response);
-        });
-}
-
-function Book_Search(titleKeyword, authorKeyword, hashtagKeyword, photoKeyword, genreKeyword, res){
-    bookDao.Book_Search(titleKeyword, authorKeyword, hashtagKeyword, photoKeyword, genreKeyword,
-            price, connection, function(response){
+function Book_Insert(book, res){
+    bookDao.Book_Insert(book, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -206,18 +192,23 @@ function Book_Search(titleKeyword, authorKeyword, hashtagKeyword, photoKeyword, 
     });
 }
 
-function Book_Update(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-        genre, bookCondition, action, isDeleted, createDate, userID, price, res){
-    bookDao.Book_Update(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-            genre, bookCondition, action, isDeleted, createDate, userID, price, connection, function(response) {
-        if (response == 701)
+function Book_Search(book, res){
+    bookDao.Book_Search(book, connection, function(response){
+        if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
             res.json(response);
     });
 }
 
-
+function Book_Update(book, res){
+    bookDao.Book_Update(book, connection, function(response) {
+        if (response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            res.json(response);
+    });
+}
 module.exports.getAllBook = getAllBook;
 module.exports.updateBook = updateBook;
 module.exports.getAllBookByUserId = getAllBookByUserId;

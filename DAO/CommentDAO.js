@@ -15,9 +15,10 @@ function Comment_Delete(commentid, connection, callback){
     });
 }
 
-function Comment_Filter(commentid, createDate, threadid, userid, connection, callback){
-    var query = "call Comment_Filter('" + commentid ? commentid : 'null' + "', '" + createDate ? createDate : 'null'
-        + "', '" + threadid ? threadid : 'null' + "', '" + userid ? userid : 'null' + "')";
+function Comment_Filter(comment, connection, callback){
+    var query = "call Comment_Filter('" + (comment.commentid ? comment.commentid : 'null') + "', '"
+        + (comment.createDate ? comment.createDate : 'null')
+        + "', '" + (comment.threadid ? comment.threadid : 'null') + "', '" + (comment.userid ? comment.userid : 'null') + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -40,8 +41,8 @@ function Comment_GetAll(connection, callback){
 }
 
 function Comment_GetByDate(fromDate, toDate, connection, callback){
-    connection.query("call Comment_GetByDate('" + fromDate ? fromDate : 'null' + "', '"
-    + toDate ? toDate : 'null' + "')", function(err, rows){
+    connection.query("call Comment_GetByDate('" + (fromDate ? fromDate : 'null') + "', '"
+    + (toDate ? toDate : 'null') + "')", function(err, rows){
         if(err){
             callback(701);
         }
@@ -84,9 +85,9 @@ function Comment_GetByUser(userID, connection, callback){
     });
 }
 
-function Comment_Insert(commentid, content, createDate, threadid, userid, connection, callback){
-    var query = "call Comment_Insert('" + commentid + "', '" + content + "', '" + createDate + "', '" + threadid
-        + "', '" + userid + "')";
+function Comment_Insert(comment, connection, callback){
+    var query = "call Comment_Insert('" + comment.commentid + "', '" + comment.content + "', '" + comment.createDate + "', '"
+        + comment.threadid + "', '" + comment.userid + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -97,9 +98,9 @@ function Comment_Insert(commentid, content, createDate, threadid, userid, connec
     });
 }
 
-function Comment_Update(commentid, content, createDate, threadid, userid, connection, callback){
-    var query = "call Comment_Update('" + commentid + "', '" + content + "', '" + createDate + "', '" + threadid
-        + "', '" + userid + "')";
+function Comment_Update(comment, connection, callback){
+    var query = "call Comment_Update('" + comment.commentid + "', '" + comment.content + "', '" + comment.createDate + "', '"
+        + comment.threadid + "', '" + comment.userid + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);

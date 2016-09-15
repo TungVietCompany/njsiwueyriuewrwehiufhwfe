@@ -88,8 +88,8 @@ function Post_GetByUserSession(session_id, res){
     });
 }
 
-function Post_Insert(postid, title, author, comment, createDate, userid, res){
-    postDao.Post_Insert(postid, title, author, comment, createDate, userid, connection, function(response){
+function Post_Insert(post, res){
+    postDao.Post_Insert(post, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -106,8 +106,8 @@ function Post_Search(authorKeyword, commentKeyword, res){
     });
 }
 
-function Post_Update(postid, title, author, comment, createDate, userid, res){
-    postDao.Post_Update(postid, title, author, comment, createDate, userid, connection, function(response){
+function Post_Update(post, res){
+    postDao.Post_Update(post, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else

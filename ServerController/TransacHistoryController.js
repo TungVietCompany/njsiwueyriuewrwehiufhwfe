@@ -16,10 +16,8 @@ function TransacHistory_Delete(transHisid, res){
     });
 }
 
-function TransacHistory_Filter(transHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID, action,
-       isAccepted, res){
-    transHisDao.TransacHistory_Filter(transHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID,
-            action, isAccepted, connection, function(response){
+function TransacHistory_Filter(transHis, res){
+    transHisDao.TransacHistory_Filter(transHis, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -81,10 +79,8 @@ function TransacHistory_GetByAccepted(isAccepted, res){
     });
 }
 
-function TransacHistory_Insert(tranHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID,
-        action, isAccepted, res){
-    transHisDao.TransacHistory_Insert(tranHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID,
-            action, isAccepted, connection, function(response){
+function TransacHistory_Insert(tranHis, res){
+    transHisDao.TransacHistory_Insert(tranHis, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -92,10 +88,8 @@ function TransacHistory_Insert(tranHisID, buyUserID, sellUserID, createDate, buy
     });
 }
 
-function TransacHistory_Update(tranHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID,
-        action, isAccepted, res){
-    transHisDao.TransacHistory_Update(tranHisID, buyUserID, sellUserID, createDate, buyBookID, sellBookID,
-            action, isAccepted, connection, function(response){
+function TransacHistory_Update(tranHis, res){
+    transHisDao.TransacHistory_Update(tranHis, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else

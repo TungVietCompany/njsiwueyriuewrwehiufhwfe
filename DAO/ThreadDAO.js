@@ -16,9 +16,10 @@ function Thread_Delete(threadid, connection, callback){
     });
 }
 
-function Thread_Filter(threadid, title, createDate, topicID, connection, callback){
-    var query = "call Thread_Filter('" + threadid ? threadid : 'null' + "', '" + title ? title : 'null'
-        + "', '" + createDate ? createDate : 'null' + "', '" + topicID ? topicID : 'null' + "')";
+function Thread_Filter(thread, connection, callback){
+    var query = "call Thread_Filter('" + (thread.threadid ? thread.threadid : 'null') + "', '"
+        + (thread.title ? thread.title : 'null') + "', '" + (thread.createDate ? thread.createDate : 'null')
+        + "', '" + (thread.topicID ? thread.topicID : 'null') + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -41,8 +42,8 @@ function Thread_GetAll(connection, callback){
 }
 
 function Thread_GetByDate(fromDate, toDate, connection, callback){
-    connection.query("call Thread_GetByDate('" + fromDate ? fromDate : 'null' + "', '"
-        + toDate ? toDate : 'null' + "')", function(err, rows){
+    connection.query("call Thread_GetByDate('" + (fromDate ? fromDate : 'null') + "', '"
+        + (toDate ? toDate : 'null') + "')", function(err, rows){
         if(err){
             callback(701);
         }
@@ -74,9 +75,9 @@ function Thread_GetByTopic(topicid, connection, callback){
     });
 }
 
-function Thread_Insert(threadid, title, description, createDate, topicid, connection, callback){
-    var query = "call Thread_Insert('" + threadid + "', '" + title + "', '" + description +"', '" + createDate
-        + "', '" + topicid + "')";
+function Thread_Insert(thread, connection, callback){
+    var query = "call Thread_Insert('" + thread.threadid + "', '" + thread.title + "', '" + thread.description +"', '"
+        + thread.createDate + "', '" + thread.topicid + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -88,8 +89,8 @@ function Thread_Insert(threadid, title, description, createDate, topicid, connec
 }
 
 function Thread_Search(titleKeyword, descrKeyword, connection, callback){
-    var query = "call Thread_Search('" + titleKeyword ? titleKeyword : 'null' + "', '"
-        + descrKeyword ? descrKeyword : 'null' + "')";
+    var query = "call Thread_Search('" + (titleKeyword ? titleKeyword : 'null') + "', '"
+        + (descrKeyword ? descrKeyword : 'null') + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -100,9 +101,9 @@ function Thread_Search(titleKeyword, descrKeyword, connection, callback){
     });
 }
 
-function Thread_Update(threadid, title, description, createDate, topicid, connection, callback){
-    var query = "call Thread_Update('" + threadid + "', '" + title + "', '" + description +"', '" + createDate
-        + "', '" + topicid + "')";
+function Thread_Update(thread, connection, callback){
+    var query = "call Thread_Update('" + thread.threadid + "', '" + thread.title + "', '" + thread.description +"', '"
+        + thread.createDate + "', '" + thread.topicid + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);

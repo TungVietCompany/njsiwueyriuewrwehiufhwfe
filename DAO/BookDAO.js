@@ -5,7 +5,7 @@ function addBook(book,connection,callback) {
     sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
         if(response != 701)
         {
-            var query = "call sp_insert_book('" + md5.getMD5ByTime(book.title) + "','"
+            var query = "call sp_insert_book('" + md5.getMD5ByTime(book.title + response) + "','"
                 + book.title + "','" + book.author + "','"
                 + book.photo + "','" + book.hash_tag + "'," + book.location_longitude + ","
                 + book.location_latitude + ",'"+book.genre+"','"+ book.b_condition +"','"+book.b_action+"'" +
@@ -111,7 +111,7 @@ function updateBook(book,connection,callback) {
             var query = "call sp_updatebook('" + book.id +"','"
                 + book.title + "','" + book.author + "','"
                 + book.photo + "','" + book.hash_tag + "'," + book.location_longitude + ","
-                + book.location_latitude + ",'"+book.genre+"','"+ book.b_condition +"','"+book.b_action+"')";
+                + book.location_latitude + ",'"+book.genre+"','"+ book.b_condition +"','"+book.b_action+"',"+ book.price +")";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
@@ -136,28 +136,19 @@ function Book_Delete(bookid, connection, callback){
             callback(701);
         }
         else{
-            callback(rows.affectedRows);
+            callback(200);
         }
     });
 }
 
-function Book_Filter(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-        genre, bookCondition, action, isDeleted, createDate, userID, price, connection, callback){
-    var _isDeleted;
-    if(!isDeleted)
-        _isDeleted = 'null';
-    else if(isDeleted == 0)
-        _isDeleted = 'false';
-    else
-        _isDeleted = 'true';
-
-    var query = "call Book_Filter('" + bookid ? bookid : 'null' + "', '" + title ? title : 'null'
-        + "', '" + author ? author : 'null' + "', '" + photo ? photo : 'null' + "', '"
-        + hashTag ? hashTag : 'null' + "', " + locationLongitude ? locationLongitude : 'null' + ", "
-        + locationLatitude ? locationLatitude : 'null' + ", '" + genre ? genre : 'null' + "', '"
-        + bookCondition ? bookCondition : 'null' + "', '" + action ? action : 'null' + "', "
-        + _isDeleted + ", '" + createDate ? createDate : 'null' + "', '" + userID ? userID : 'null' + "', "
-        + price ? price : 'null' + ")";
+function Book_Filter(book, connection, callback){
+    var query = "call Book_Filter('" + (book.bookid ? book.bookid : 'null') + "', '" + (book.title ? book.title : 'null')
+        + "', '" + (book.author ? book.author : 'null') + "', '" + (book.photo ? book.photo : 'null') + "', '"
+        + (book.hashTag ? book.hashTag : 'null') + "', " + (book.locationLongitude ? book.locationLongitude : 'null') + ", "
+        + (book.locationLatitude ? book.locationLatitude : 'null') + ", '" + (book.genre ? book.genre : 'null') + "', '"
+        + (book.bookCondition ? book.bookCondition : 'null') + "', '" + (book.action ? book.action : 'null') + "', "
+        + (book.isDeleted ? book.isDeleted : 'null' + ", '" + (book.createDate ? book.createDate : 'null') + "', '"
+        + (book.userID ? book.userID : 'null') + "', " + (book.price ? book.price : 'null') + ")");
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -226,8 +217,8 @@ function Book_GetByID(bookID, connection, callback){
 }
 
 function Book_GetByPrice(minPrice, maxPrice, connection, callback){
-    connection.query("call Book_GetByPrice(" + minPrice ? minPrice : 'null' + ", "
-        + maxPrice ? maxPrice : 'null' + ")", function(err, rows){
+    connection.query("call Book_GetByPrice(" + (minPrice ? minPrice : 'null') + ", "
+        + (maxPrice ? maxPrice : 'null') + ")", function(err, rows){
         if(err){
             callback(701);
         }
@@ -276,12 +267,11 @@ function Book_GetByUserSession(session_id, connection, callback){
     });
 }
 
-function Book_Insert(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-         genre, bookCondition, action, isDeleted, createDate, userID, price, connection, callback){
-    var query = "call Book_Insert('" + bookid + "', '" + title + "', '" + author + "', '" + photo
-        + "', '" + hashTag + "', " + locationLongitude + ", " + locationLatitude + ", '" + genre
-        + "', '" + bookCondition + "', '" + action + "', " + isDeleted + ", '" + createDate + "', '" + userID
-        + "', " + price + ")";
+function Book_Insert(book, connection, callback){
+    var query = "call Book_Insert('" + book.bookid + "', '" + book.title + "', '" + book.author + "', '" + book.photo
+        + "', '" + book.hashTag + "', " + book.locationLongitude + ", " + book.locationLatitude + ", '" + book.genre
+        + "', '" + book.bookCondition + "', '" + book.action + "', " + book.isDeleted + ", '" + book.createDate + "', '"
+        + book.userID + "', " + book.price + ")";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -292,10 +282,11 @@ function Book_Insert(bookid, title, author, photo, hashTag, locationLongitude, l
     });
 }
 
-function Book_Search(titleKeyword, authorKeyword, hashtagKeyword, photoKeyword, genreKeyword, connection, callback){
-    var query = "call Book_Search('" + titleKeyword ? titleKeyword : 'null' + "', '"
-        + authorKeyword ? authorKeyword : 'null' + "', '" + hashtagKeyword ? hashtagKeyword : 'null' + "', '"
-        + photoKeyword ? photoKeyword : 'null' + "', '" + genreKeyword ? genreKeyword : 'null' + "')";
+function Book_Search(book, connection, callback){
+    var query = "call Book_Search('" + (book.titleKeyword ? book.titleKeyword : 'null') + "', '"
+        + (book.authorKeyword ? book.authorKeyword : 'null') + "', '" + (book.hashtagKeyword ? book.hashtagKeyword : 'null')
+        + "', '" + (book.photoKeyword ? book.photoKeyword : 'null') + "', '" + (book.genreKeyword ? book.genreKeyword : 'null')
+        + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -306,13 +297,12 @@ function Book_Search(titleKeyword, authorKeyword, hashtagKeyword, photoKeyword, 
     });
 }
 
-function Book_Update(bookid, title, author, photo, hashTag, locationLongitude, locationLatitude,
-         genre, bookCondition, action, isDeleted, createDate, userID, price, connection, callback){
+function Book_Update(book, connection, callback){
     var _isDeleted;
-    var query = "call Book_Update('" + bookid + "', '" + title + "', '" + author + "', '" + photo
-        + "', '" + hashTag + "', " + locationLongitude + ", " + locationLatitude + ", '" + genre
-        + "', '" + bookCondition + "', '" + action + "', " + isDeleted + ", '" + createDate + "', '" + userID
-        + "', " + price + ")";
+    var query = "call Book_Update('" + book.bookid + "', '" + book.title + "', '" + book.author + "', '" + book.photo
+        + "', '" + book.hashTag + "', " + book.locationLongitude + ", " + book.locationLatitude + ", '" + book.genre
+        + "', '" + book.bookCondition + "', '" + book.action + "', " + book.isDeleted + ", '" + book.createDate + "', '"
+        + book.userID + "', " + book.price + ")";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -322,6 +312,7 @@ function Book_Update(bookid, title, author, photo, hashTag, locationLongitude, l
         }
     });
 }
+
 
 module.exports.getAllBookByUserId = getAllBookByUserId;
 module.exports.getBookInfoById = getBookInfoById;

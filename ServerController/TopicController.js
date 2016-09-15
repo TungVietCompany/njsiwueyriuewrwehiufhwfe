@@ -16,8 +16,8 @@ function Topic_Delete(topicid, res){
     });
 }
 
-function Topic_Filter(topicid, title, createDate, userid, res){
-    topicDao.Topic_Filter(topicid, title, createDate, userid, connection, function(response){
+function Topic_Filter(topic, res){
+    topicDao.Topic_Filter(topic, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -70,8 +70,8 @@ function Topic_GetByUserSession(session_id, res){
     });
 }
 
-function Topic_Insert(topicid, title, description, createDate, userid, res){
-    topicDao.Topic_Insert(topicid, title, description, createDate, userid, connection, function(response){
+function Topic_Insert(topic, userid, res){
+    topicDao.Topic_Insert(topic, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -88,8 +88,8 @@ function Topic_Search(titleKeyword, descrKeyword, res){
     });
 }
 
-function Topic_Update(topicid, title, description, createDate, userid, res){
-    topicDao.Topic_Update(topicid, title, description, createDate, userid, connection, function(response){
+function Topic_Update(topic, userid, res){
+    topicDao.Topic_Update(topic, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else

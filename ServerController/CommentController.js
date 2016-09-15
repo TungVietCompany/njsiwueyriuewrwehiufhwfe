@@ -17,8 +17,8 @@ function Comment_Delete(commentid, res){
     });
 }
 
-function Comment_Filter(commentid, createDate, threadid, userid, res){
-    commentDao.Comment_Filter(commentid, createDate, threadid, userid, connection, function(response){
+function Comment_Filter(comment, res){
+    commentDao.Comment_Filter(comment, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -71,8 +71,8 @@ function Comment_GetByUser(userID, res){
     });
 }
 
-function Comment_Insert(commentid, content, createDate, threadid, userid, res){
-    commentDao.Comment_Insert(commentid, content, createDate, threadid, connection, function(response){
+function Comment_Insert(comment, res){
+    commentDao.Comment_Insert(comment, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -80,8 +80,8 @@ function Comment_Insert(commentid, content, createDate, threadid, userid, res){
     });
 }
 
-function Comment_Update(commentid, content, createDate, threadid, userid, res){
-    commentDao.Comment_Update(commentid, content, createDate, threadid, userid, connection, function(response){
+function Comment_Update(comment, res){
+    commentDao.Comment_Update(comment, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else

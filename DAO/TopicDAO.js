@@ -16,9 +16,10 @@ function Topic_Delete(topicid, connection, callback){
     });
 }
 
-function Topic_Filter(topicid, title, createDate, userid, connection, callback){
-    var query = "call Topic_Filter('" + topicid ? topicid : 'null' + "', '" + title ? title : 'null'
-        + "', '" + createDate ? createDate : 'null' + "', '" + userid ? userid : 'null' + "')";
+function Topic_Filter(topic, connection, callback){
+    var query = "call Topic_Filter('" + (topic.topicid ? topic.topicid : 'null') + "', '" + (topic.title ? topic.title : 'null')
+        + "', '" + (topic.createDate ? topic.createDate : 'null') + "', '" + (topic.userid ? topic.userid : 'null') + "')";
+
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -41,8 +42,8 @@ function Topic_GetAll(connection, callback){
 }
 
 function Topic_GetByDate(fromDate, toDate, connection, callback){
-    connection.query("call Topic_GetByDate('" + fromDate ? fromDate : 'null' + "', '"
-    + toDate ? toDate : 'null' + "')", function(err, rows){
+    connection.query("call Topic_GetByDate('" + (fromDate ? fromDate : 'null') + "', '"
+    + (toDate ? toDate : 'null') + "')", function(err, rows){
         if(err){
             callback(701);
         }
@@ -91,22 +92,23 @@ function Topic_GetByUserSession(session_id, connection, callback){
     });
 }
 
-function Topic_Insert(topicid, title, description, createDate, userid, connection, callback){
-    var query = "call Topic_Insert('" + topicid + "', '" + title + "', '" + description + "', '" + createDate
-        + "', '" + userid + "')";
-    connection.query(query, function(err, rows){
+function Topic_Insert(topic, connection, callback){
+    var query = "call Topic_Insert('" + topic.topicid + "', '" + topic.title + "', '" + topic.description + "', '"
+        + topic.createDate + "', '" + topic.userid + "')";
+    callback(query);
+    /*connection.query(query, function(err, rows){
         if(err){
             callback(701);
         }
         else{
             callback(rows.affectedRows);
         }
-    });
+    });*/
 }
 
 function Topic_Search(titleKeyword, descrKeyword, connection, callback){
-    var query = "call Topic_Search('" + titleKeyword ? titleKeyword : 'null' + "', '"
-        + descrKeyword ? descrKeyword : 'null' + "')";
+    var query = "call Topic_Search('" + (titleKeyword ? titleKeyword : 'null') + "', '"
+        + (descrKeyword ? descrKeyword : 'null') + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -117,10 +119,10 @@ function Topic_Search(titleKeyword, descrKeyword, connection, callback){
     });
 }
 
-function Topic_Update(topicid, title, description, createDate, userid, connection, callback){
+function Topic_Update(topic, connection, callback){
     var _isDeleted;
-    var query = "call Topic_Update('" + topicid + "', '" + title + "', '" + description + "', '" + createDate
-        + "', '" + userid + "')";
+    var query = "call Topic_Update('" + topic.topicid + "', '" + topic.title + "', '" + topic.description + "', '"
+        + topic.createDate + "', '" + topic.userid + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);

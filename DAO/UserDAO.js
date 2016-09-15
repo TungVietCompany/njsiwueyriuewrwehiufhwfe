@@ -47,7 +47,7 @@ function userLogin(user, connection, callback) {
                 callback(701);
             }
             try{
-                console.log(rows[0][0].id);
+
                 var session_id = md5.getMD5ByTime(user.username);
                 updateUserSession(rows[0][0].id,session_id,user.device_type,connection,function (response) {
                     if(response == 200)
@@ -176,20 +176,11 @@ function User_Delete(userid, connection, callback){
     });
 }
 
-function User_Filter(userid, firstName, lastName, userName, birthDay, phone, isDeleted,
-        createDate, connection, callback){
-    var _isDeleted;
-    if(!isDeleted)
-        _isDeleted = 'null';
-    else if(isDeleted == 0)
-        _isDeleted = 'false';
-    else
-        _isDeleted = 'true';
-
-    var query = "call User_Filter('" + userid ? userid : 'null' + "', '" + firstName ? firstName : 'null'
-        + "', '" + lastName ? lastName : 'null' + "', '" + userName ? userName : 'null' + "', '"
-        + birthDay ? birthDay : 'null' + "', '" + phone ? phone : 'null' + "', " + _isDeleted + ", '"
-        + createDate ? createDate : 'null' + "')";
+function User_Filter(user, connection, callback){
+    var query = "call User_Filter('" + (user.userid ? user.userid : 'null') + "', '" + (user.firstName ? user.firstName : 'null')
+        + "', '" + (user.lastName ? user.lastName : 'null') + "', '" + (user.userName ? user.userName : 'null') + "', '"
+        + (user.birthDay ? user.birthDay : 'null') + "', '" + (user.phone ? user.phone : 'null') + "', "
+        + (user.isDeleted ? user.isDeleted : 'null') + ", '" + (user.createDate ? user.createDate : 'null') + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -212,7 +203,7 @@ function User_GetAll(connection, callback){
 }
 
 function User_GetByDeleted(isDeleted, connection, callback){
-    connection.query("call User_GetByDeleted('" + isDeleted + "')", function(err, rows){
+    connection.query("call User_GetByDeleted(" + isDeleted + ")", function(err, rows){
         if(err){
             callback(701);
         }
@@ -223,7 +214,7 @@ function User_GetByDeleted(isDeleted, connection, callback){
 }
 
 function User_GetByActive(isActive, connection, callback){
-    connection.query("call User_GetByActive('" + isActive + "')", function(err, rows){
+    connection.query("call User_GetByActive(" + isActive + ")", function(err, rows){
         if(err){
             callback(701);
         }
@@ -272,12 +263,11 @@ function User_GetByUserSession(session_id, connection, callback){
     });
 }
 
-function User_Insert(userid, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
-        isActive, createDate, connection, callback){
+function User_Insert(user, connection, callback){
     //isDeleted, isActive: int
-    var query = "call User_Insert('" + userid + "', '" + firstName + "', '" + lastName + "', '" + userName + "', '"
-        + mail + "', '" + birthDay + "', '" + phone + "', '" + password + "', "
-        + isDeleted  + ", " + isActive + ", '" + createDate + "')";
+    var query = "call User_Insert('" + user.userid + "', '" + user.firstName + "', '" + user.lastName + "', '"
+        + user.userName + "', '" + user.mail + "', '" + user.birthDay + "', '" + user.phone + "', '" + user.password
+        + "', " + user.isDeleted  + ", " + user.isActive + ", '" + user.createDate + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -288,12 +278,11 @@ function User_Insert(userid, firstName, lastName, userName, mail, birthDay, phon
     });
 }
 
-function User_Update(userid, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
-         isActive, createDate, connection, callback){
+function User_Update(user, connection, callback){
     //isDeleted, IsActive: int
-    var query = "call User_Update('" + userid + "', '" + firstName + "', '" + lastName + "', '" + userName + "', '"
-    + mail + "', '" + birthDay + "', '" + phone + "', '" + password + "', "
-    + isDeleted + ", " + isActive + ", '" + createDate + "')";
+    var query = "call User_Update('" + user.userid + "', '" + user.firstName + "', '" + user.lastName + "', '"
+        + user.userName + "', '" + user.mail + "', '" + user.birthDay + "', '" + user.phone + "', '" + user.password
+        + "', " + user.isDeleted  + ", " + user.isActive + ", '" + user.createDate + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -304,13 +293,12 @@ function User_Update(userid, firstName, lastName, userName, mail, birthDay, phon
     });
 }
 
-function User_UpdateByUserSession(session_id, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
-        isActive, createDate, connection, callback){
-    sessionDao.getUserIdBySessionId(session_id, connection, function(response){
+function User_UpdateByUserSession(user, connection, callback){
+    sessionDao.getUserIdBySessionId(user.session_id, connection, function(response){
         if(response != 701){
-            connection.query("call User_Update('" + userid + "', '" + firstName + "', '" + lastName + "', '" + userName + "', '"
-            + mail + "', '" + birthDay + "', '" + phone + "', '" + password + "', "
-            + isDeleted + ", " + isActive + ", '" + createDate + "')", function(err, rows){
+            connection.query("call User_Update('" + response + "', '" + user.firstName + "', '" + user.lastName + "', '"
+                + user.userName + "', '" + user.mail + "', '" + user.birthDay + "', '" + user.phone + "', '" + user.password
+                + "', " + user.isDeleted + ", " + user.isActive + ", '" + user.createDate + "')", function(err, rows){
                 if(err){
                     callback(701);
                 }
@@ -323,7 +311,6 @@ function User_UpdateByUserSession(session_id, firstName, lastName, userName, mai
             callback(701);
     });
 }
-
 module.exports.userLogout = userLogout;
 module.exports.changePassword = changePassword;
 module.exports.updateUserInfo = updateUserInfo;

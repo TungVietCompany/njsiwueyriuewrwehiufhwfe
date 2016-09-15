@@ -6,7 +6,6 @@ var postController = require('./ServerController/PostController');
 var threadController = require('./ServerController/ThreadController');
 var topicController = require('./ServerController/TopicController');
 var transHisController = require('./ServerController/TransacHistoryController');
-var bookDAO = require('./DAO/BookDAO');
 var connection = require('./DatabaseConnection/MysqlConnection');
 
 var MD5 = require('./Library/MD5');
@@ -25,6 +24,8 @@ var multer = require('multer');
 
 
 //User Service
+
+
 app.post('/booxtown/rest/user/signup_ios', function (req, res) {
     userController.signup(req.query, res);
 });
@@ -65,6 +66,7 @@ app.post('/booxtown/rest/user/forgotpassword', function (req, res) {
 //Book Service
 
 app.post('/booxtown/rest/book/addbook', function (req, res) {
+    console.log(req.body);
     bookController.addBook(req.body, res);
 });
 
@@ -73,6 +75,7 @@ app.post('/booxtown/rest/book/addbook_ios', function (req, res) {
 });
 
 app.post('/booxtown/rest/book/update', function (req, res) {
+    console.log(req.body);
     bookController.updateBook(req.body, res);
 });
 
@@ -81,18 +84,17 @@ app.get('/booxtown/rest/book/getinfo', function (req, res) {
 });
 //DungNS 11-9-2016 -------------------
 
+
 app.get('/booxtown/book/book_getall', function(req, res){
-     bookController.Book_GetAll(res);
+    bookController.Book_GetAll(res);
 });
 
-app.get('/booxtown/book/book_delete', function(req, res){
-    bookController.Book_Delete(req.query.bookid, res);
+app.delete('/booxtown/book/book_delete', function(req, res){
+    bookController.Book_Delete(req.query.book_id, res);
 });
 
 app.get('/booxtown/book/book_filter', function(req, res){
-    bookController.Book_Filter(req.query.bookid, req.query.title, req.query.author, req.query.photo, req.query.hashTag,
-        req.query.locationLongitude, req.query.locationLatitude, req.query.genre, req.query.bookCondition,
-        req.query.action, req.query.isDeleted, req.query.createDate, req.query.userID, req.query.price, res);
+    bookController.Book_Filter(req.query, res);
 });
 
 app.get('/booxtown/book/book_getbyauthor', function(req, res){
@@ -103,9 +105,12 @@ app.get('/booxtown/book/book_getbydate', function(req, res){
     bookController.Book_GetByDate(req.query.fromdate, req.query.todate, res);
 });
 
-app.get('/test', function(req, res){
-    res.send(req.query.fromdate + req.query.todate);
-});
+/*app.post('/test', function(req, res){
+ //res.send(req.query.fromdate + req.query.todate);
+ var query = "call Topic_Insert('" + req.body.topicid + "', '" + req.body.title + "', '" + req.body.description + "', '" + req.body.createDate
+ + "', '" + req.body.userid + "')";
+ res.send(query);
+ });*/
 
 app.get('/booxtown/book/book_getbydeleted', function(req, res){
     bookController.Book_GetByDeleted(req.query.isdeleted, res);
@@ -131,30 +136,24 @@ app.get('/booxtown/book/book_getbyusersession', function(req, res){
     bookController.Book_GetByUserSession(req.query.session_id, res);
 });
 
-app.get('/booxtown/book/book_insert', function(req, res){
-    bookController.Book_Insert(req.query.bookid, req.query.title, req.query.author, req.query.photo, req.query.hashTag,
-        req.query.locationLongitude, req.query.locationLatitude, req.query.genre, req.query.bookCondition,
-        req.query.action, req.query.isDeleted, req.query.createDate, req.query.userID, req.query.price, res);
+app.post('/booxtown/book/book_insert', function(req, res){
+    bookController.Book_Insert(req.body, res);
 });
 
 app.get('/booxtown/book/book_search', function(req, res){
-    bookController.Book_Search(req.query.titleKeyword, req.query.authorKeyword, req.query.hashtagKeyword,
-        req.query.photoKeyword, req.query.genreKeyword, res);
+    bookController.Book_Search(req.query, res);
 });
 
-app.get('/booxtown/book/book_update', function(req, res){
-    bookController.Book_Update(req.query.bookid, req.query.title, req.query.author, req.query.photo, req.query.hashTag,
-        req.query.locationLongitude, req.query.locationLatitude, req.query.genre, req.query.bookCondition,
-        req.query.action, req.query.isDeleted, req.query.createDate, req.query.userID, req.query.price, res);
+app.post('/booxtown/book/book_update', function(req, res){
+    bookController.Book_Update(req.query, res);
 });
 
-app.get('/booxtown/comment/comment_delete', function(req, res){
+app.delete('/booxtown/comment/comment_delete', function(req, res){
     commentController.Comment_Delete(req.query.commentid, res);
 });
 
 app.get('/booxtown/comment/comment_filter', function(req, res){
-    commentController.Comment_Filter(req.query.commentid, req.query.createDate, req.query.threadid,
-        req.query.userid, res);
+    commentController.Comment_Filter(req.query, res);
 });
 
 app.get('/booxtown/comment/comment_getall', function(req, res){
@@ -177,17 +176,15 @@ app.get('/booxtown/comment/comment_getbyuser', function(req, res){
     commentController.Comment_GetByUser(req.query.userid, res);
 });
 
-app.get('/booxtown/comment/comment_insert', function(req, res){
-    commentController.Comment_Insert(req.query.commentid, req.query.content, req.query.createDate, req.query.threadid,
-        req.query.userid, res);
+app.post('/booxtown/comment/comment_insert', function(req, res){
+    commentController.Comment_Insert(req.body, res);
 });
 
-app.get('/booxtown/comment/comment_update', function(req, res){
-    commentController.Comment_Update(req.query.commentid, req.query.content, req.query.createDate, req.query.threadid,
-        req.query.userid, res);
+app.post('/booxtown/comment/comment_update', function(req, res){
+    commentController.Comment_Update(req.body, res);
 });
 
-app.get('/booxtown/post/post_delete', function(req, res){
+app.delete('/booxtown/post/post_delete', function(req, res){
     postController.Post_Delete(req.query.postid, res);
 });
 
@@ -223,26 +220,24 @@ app.get('/booxtown/post/post_getbyusersession', function(req, res){
     postController.Post_GetByUserSession(req.query.session_id, res);
 });
 
-app.get('/booxtown/post/post_insert', function(req, res){
-    postController.Post_Insert(req.query.postid, req.query.title, req.query.author, req.query.comment,
-        req.query.createDate, req.query.userid, res);
+app.post('/booxtown/post/post_insert', function(req, res){
+    postController.Post_Insert(req.body, res);
 });
 
 app.get('/booxtown/post/post_search', function(req, res){
     postController.Post_Search(req.query.authorkeyword, req.query.commentkeyword, res);
 });
 
-app.get('/booxtown/post/post_update', function(req, res){
-    postController.Post_Update(req.query.postid, req.query.title, req.query.author, req.query.comment,
-        req.query.createDate, req.query.userid, res);
+app.post('/booxtown/post/post_update', function(req, res){
+    postController.Post_Update(req.body, res);
 });
 
-app.get('/booxtown/thread/thread_delete', function(req, res){
+app.delete('/booxtown/thread/thread_delete', function(req, res){
     threadController.Thread_Delete(req.query.threadid, res);
 });
 
 app.get('/booxtown/thread/thread_filter', function(req, res){
-    threadController.Thread_Filter(req.query.threadid, req.query.title, req.query.createDate, req.query.topicID, res);
+    threadController.Thread_Filter(req.query, res);
 });
 
 app.get('/booxtown/thread/thread_getall', function(req, res){
@@ -261,26 +256,24 @@ app.get('/booxtown/thread/thread_getbytopic', function(req, res){
     threadController.Thread_GetByTopic(req.query.topicid, res);
 });
 
-app.get('/booxtown/thread/thread_insert', function(req, res){
-    threadController.Thread_Insert(req.query.threadid, req.query.title, req.query.description, req.query.createDate,
-        req.query.topicid, res);
+app.post('/booxtown/thread/thread_insert', function(req, res){
+    threadController.Thread_Insert(req.body, res);
 });
 
 app.get('/booxtown/thread/thread_search', function(req, res){
     threadController.Thread_Search(req.query.titleKeyword, req.query.descrKeyword, res);
 });
 
-app.get('/booxtown/thread/thread_update', function(req, res){
-    threadController.Thread_Update(req.query.threadid, req.query.title, req.query.description, req.query.createDate,
-        req.query.topicid, res);
+app.post('/booxtown/thread/thread_update', function(req, res){
+    threadController.Thread_Update(req.body, res);
 });
 
-app.get('/booxtown/topic/topic_delete', function(req, res){
+app.delete('/booxtown/topic/topic_delete', function(req, res){
     topicController.Topic_Delete(req.query.topicid, res);
 });
 
 app.get('/booxtown/topic/topic_filter', function(req, res){
-    topicController.Topic_Filter(req.query.topicid, req.query.title, req.query.createDate, req.query.userid, res);
+    topicController.Topic_Filter(req.query, res);
 });
 
 app.get('/booxtown/topic/topic_getall', function(req, res){
@@ -303,28 +296,24 @@ app.get('/booxtown/topic/topic_getbyusersession', function(req, res){
     topicController.Topic_GetByUserSession(req.query.session_id, res);
 });
 
-app.get('/booxtown/topic/topic_insert', function(req, res){
-    topicController.Topic_Insert(req.query.topicid, req.query.title, req.query.description, req.query.createDate,
-        req.query.userid, res);
+app.post('/booxtown/topic/topic_insert', function(req, res){
+    topicController.Topic_Insert(req.body, res);
 });
 
 app.get('/booxtown/topic/topic_search', function(req, res){
     topicController.Topic_Search(req.query.titlekeyword, req.query.descrkeyword, res);
 });
 
-app.get('/booxtown/topic/topic_update', function(req, res){
-    topicController.Topic_Update(req.query.topicid, req.query.title, req.query.description, req.query.createDate,
-        req.query.userid, res);
+app.post('/booxtown/topic/topic_update', function(req, res){
+    topicController.Topic_Update(req.body, res);
 });
 
-app.get('/booxtown/transactionhistory/tranhis_delete', function(req, res){
+app.delete('/booxtown/transactionhistory/tranhis_delete', function(req, res){
     transHisController.TransacHistory_Delete(req.query.tranhisid, res);
 });
 
 app.get('/booxtown/transactionhistory/tranhis_filter', function(req, res){
-    transHisController.TransacHistory_Filter(req.query.transHisID, req.query.buyUserID, req.query.sellUserID,
-        req.query.createDate, req.query.buyBookID, req.query.sellBookID, req.query.action,
-        req.query.isAccepted, res);
+    transHisController.TransacHistory_Filter(req.query, res);
 });
 
 app.get('/booxtown/transactionhistory/tranhis_getall', function(req, res){
@@ -351,25 +340,20 @@ app.get('/booxtown/transactionhistory/tranhis_getbyaccepted', function(req, res)
     transHisController.TransacHistory_GetByAccepted(req.query.isaccepted, res);
 });
 
-app.get('/booxtown/transactionhistory/tranhis_insert', function(req, res){
-    transHisController.TransacHistory_Insert(req.query.tranHisID, req.query.buyUserID, req.query.sellUserID,
-        req.query.createDate, req.query.buyBookID, req.query.sellBookID,
-        req.query.action, req.query.isAccepted, res);
+app.post('/booxtown/transactionhistory/tranhis_insert', function(req, res){
+    transHisController.TransacHistory_Insert(req.body, res);
 });
 
-app.get('/booxtown/transactionhistory/tranhis_update', function(req, res){
-    transHisController.TransacHistory_Update(req.query.tranHisID, req.query.buyUserID, req.query.sellUserID,
-        req.query.createDate, req.query.buyBookID, req.query.sellBookID,
-        req.query.action, req.query.isAccepted, res);
+app.post('/booxtown/transactionhistory/tranhis_update', function(req, res){
+    transHisController.TransacHistory_Update(req.body, res);
 });
 
-app.get('/booxtown/user/user_delete', function(req, res){
+app.delete('/booxtown/user/user_delete', function(req, res){
     userController.User_Delete(req.query.userid, res);
 });
 
 app.get('/booxtown/user/user_filter', function(req, res){
-    userController.User_Filter(req.query.userid, req.query.firstName, req.query.lastName, req.query.userName,
-        req.query.birthDay, req.query.phone, req.query.isDeleted, req.query.createDate, res);
+    userController.User_Filter(req.query, res);
 });
 
 app.get('/booxtown/user/user_getall', function(req, res){
@@ -396,22 +380,16 @@ app.get('/booxtown/user/user_getbyusersession', function(req, res){
     userController.User_GetByUserSession(req.query.session_id, res);
 });
 
-app.get('/booxtown/user/user_insert', function(req, res){
-    userController.User_Insert(req.query.userid, req.query.firstName, req.query.lastName, req.query.userName,
-        req.query.mail, req.query.birthDay, req.query.phone, req.query.password, req.query.isDeleted,
-        req.query.isActive, req.query.createDate, res);
+app.post('/booxtown/user/user_insert', function(req, res){
+    userController.User_Insert(req.body, res);
 });
 
-app.get('/booxtown/user/user_update', function(req, res){
-    userController.User_Update(req.query.userid, req.query.firstName, req.query.lastName, req.query.userName,
-        req.query.mail, req.query.birthDay, req.query.phone, req.query.password, req.query.isDeleted,
-        req.query.isActive, req.query.createDate, res);
+app.post('/booxtown/user/user_update', function(req, res){
+    userController.User_Update(req.body, res);
 });
 
-app.get('/booxtown/user/user_updatebyusersession', function(req, res){
-    userController.User_UpdateByUserSession(req.query.session_id, req.query.firstName, req.query.lastName, req.query.userName,
-        req.query.mail, req.query.birthDay, req.query.phone, req.query.password, req.query.isDeleted,
-        req.query.isActive, req.query.createDate, res);
+app.post('/booxtown/user/user_updatebyusersession', function(req, res){
+    userController.User_UpdateByUserSession(req.body, res);
 });
 
 //---------------------
@@ -471,3 +449,23 @@ process.on('uncaughtException', function (err) {
     console.log(err);
 });
 
+/*var db_config = {
+    host     : '103.237.147.54',
+    user     : 'boxtown',
+    password : 'boxtown2016',
+    database : 'booxtown'
+};
+var mysql      = require('mysql');
+function handleDisconnect() {
+    console.log('handleDisconnect()');
+    connection.destroy();
+    connection = mysql.createConnection(db_config);
+    connection.connect(function(err) {
+        if(err) {
+            console.log(' Error when connecting to db  (DBERR001):', err);
+            setTimeout(handleDisconnect, 1000);
+        }
+    });
+}*/
+/*
+app.on('listening', handleDisconnect());*/

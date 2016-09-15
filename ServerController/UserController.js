@@ -3,7 +3,7 @@ var userDao = require('../DAO/UserDAO');
 var sessionDao = require('../DAO/SessionDAO');
 var ResponseData = require('../DAO/ResponseData');
 var md5 = require('../Library/MD5');
-connection.connect();
+//connection.connect();
 //Sign up
 function signup(user, res) {
     var err = new ResponseData(701, "Tên đăng ký đã tồn tại", "");
@@ -141,6 +141,7 @@ function checkUserExits(username, res) {
 module.exports.updateUserInforById_ios = updateUserInforById_ios;
 //DungNS 11-9-2016
 
+
 function User_Delete(userid, res){
     userDao.User_Delete(userid, connection, function(response) {
         if (response == 701)
@@ -150,10 +151,8 @@ function User_Delete(userid, res){
     });
 }
 
-function User_Filter(userid, firstName, lastName, userName, birthDay, phone, isDeleted,
-        createDate, res){
-    userDao.User_Filter(userid, firstName, lastName, userName, birthDay, phone, isDeleted,
-            createDate, connection, function(response) {
+function User_Filter(user, res){
+    userDao.User_Filter(user, connection, function(response) {
         if (response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -215,10 +214,8 @@ function User_GetByUserSession(session_id, res){
     });
 }
 
-function User_Insert(userid, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
-        isActive, createDate, res){
-    userDao.User_Insert(userid, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
-        isActive, createDate, connection, function(response) {
+function User_Insert(user, res){
+    userDao.User_Insert(user, connection, function(response) {
         if (response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -226,10 +223,8 @@ function User_Insert(userid, firstName, lastName, userName, mail, birthDay, phon
     });
 }
 
-function User_Update(userid, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
-        isActive, createDate, res){
-    userDao.User_Update(userid, firstName, lastName, userName, mail, birthDay, phone, password, isDeleted,
-            isActive, createDate, connection, function(response) {
+function User_Update(user, res){
+    userDao.User_Update(user, connection, function(response) {
         if (response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
@@ -237,10 +232,8 @@ function User_Update(userid, firstName, lastName, userName, mail, birthDay, phon
     });
 }
 
-function User_UpdateByUserSession(session_id, firstName, lastName, userName, mail, birthDay, phone, password,
-        isDeleted, isActive, createDate, res){
-    userDao.User_UpdateByUserSession(session_id, firstName, lastName, userName, mail, birthDay, phone, password,
-            isDeleted, isActive, createDate, connection, function(response) {
+function User_UpdateByUserSession(user, res){
+    userDao.User_UpdateByUserSession(user, connection, function(response) {
         if (response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else

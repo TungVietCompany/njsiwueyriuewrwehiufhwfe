@@ -17,8 +17,8 @@ function Post_Delete(postid, connection, callback){
 }
 
 function Post_Filter(postid, createDate, userid, connection, callback){
-    var query = "call Post_Filter('" + postid ? postid : 'null' + "', '" + createDate ? createDate : 'null'
-        + "', '" + userid ? userid : 'null' + "')";
+    var query = "call Post_Filter('" + (postid ? postid : 'null') + "', '" + (createDate ? createDate : 'null')
+        + "', '" + (userid ? userid : 'null') + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -52,8 +52,8 @@ function Post_GetByAuthor(author, connection, callback){
 }
 
 function Post_GetByDate(fromDate, toDate, connection, callback){
-    connection.query("call Post_GetByDate('" + fromDate ? fromDate : 'null' + "', '"
-    + toDate ? toDate : 'null' + "')", function(err, rows){
+    connection.query("call Post_GetByDate('" + (fromDate ? fromDate : 'null') + "', '"
+    + (toDate ? toDate : 'null') + "')", function(err, rows){
         if(err){
             callback(701);
         }
@@ -113,9 +113,9 @@ function Post_GetByUserSession(session_id, connection, callback){
     });
 }
 
-function Post_Insert(postid, title, author, comment, createDate, userid, connection, callback){
-    var query = "call Post_Insert('" + postid + "', '" + title + "', '" + author + "', '" + comment
-        + "', '" + createDate + "', '" + userid + "')";
+function Post_Insert(post, connection, callback){
+    var query = "call Post_Insert('" + post.postid + "', '" + post.title + "', '" + post.author + "', '" + post.comment
+        + "', '" + post.createDate + "', '" + post.userid + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -127,8 +127,8 @@ function Post_Insert(postid, title, author, comment, createDate, userid, connect
 }
 
 function Post_Search(authorKeyword, commentKeyword, connection, callback){
-    var query = "call Post_Search('" + authorKeyword ? authorKeyword : 'null' + "', '"
-        + commentKeyword ? commentKeyword : 'null' + "')";
+    var query = "call Post_Search('" + (authorKeyword ? authorKeyword : 'null') + "', '"
+        + (commentKeyword ? commentKeyword : 'null') + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
@@ -139,9 +139,9 @@ function Post_Search(authorKeyword, commentKeyword, connection, callback){
     });
 }
 
-function Post_Update(postid, title, author, comment, createDate, userid, connection, callback){
-    var query = "call Post_Update('" + postid + "', '" + title + "', '" + author + "', '" + comment
-        + "', '" + createDate + "', '" + userid + "')";
+function Post_Update(post, connection, callback){
+    var query = "call Post_Update('" + post.postid + "', '" + post.title + "', '" + post.author + "', '" + post.comment
+        + "', '" + post.createDate + "', '" + post.userid + "')";
     connection.query(query, function(err, rows){
         if(err){
             callback(701);
