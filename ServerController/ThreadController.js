@@ -52,12 +52,17 @@ function Thread_GetByID(threadid, res){
     });
 }
 
-function Thread_GetByTopic(topicid, res){
+function Thread_GetByTopic(topicid, res){///////////////////
     threadDao.Thread_GetByTopic(topicid, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
-            res.json(response);
+            var listThread = [];
+            var i = 0;
+            for (i = 0; i < response.length; i++) {
+                listThread.push(response[i]);
+        }
+            res.json({code:200,thread : listThread});
     });
 }
 

@@ -76,16 +76,26 @@ function Thread_GetByTopic(topicid, connection, callback){
 }
 
 function Thread_Insert(thread, connection, callback){
-    var query = "call Thread_Insert('" + thread.threadid + "', '" + thread.title + "', '" + thread.description +"', '"
-        + thread.createDate + "', '" + thread.topicid + "')";
-    connection.query(query, function(err, rows){
-        if(err){
+    sessionDao.getUserIdBySessionId(thread.session_id,connection,function (response) {
+        if(response != 701)
+        {
+            var query = "call Thread_Insert('" +  md5.getMD5ByTime(thread.title + thread.session_id) + "', '" + thread.title + "', '" + thread.description +"',"
+                +  "now(), '" + thread.topic_id + "','"+ response +"',0)";
+            connection.query(query, function(err, rows){
+                if(err){
+                    callback(701);
+                }
+                else{
+                    callback(200);
+                }
+            });
+        }
+        else
+        {
             callback(701);
         }
-        else{
-            callback(rows.affectedRows);
-        }
     });
+
 }
 
 function Thread_Search(titleKeyword, descrKeyword, connection, callback){

@@ -66,7 +66,6 @@ app.post('/booxtown/rest/user/forgotpassword', function (req, res) {
 //Book Service
 
 app.post('/booxtown/rest/book/addbook', function (req, res) {
-    console.log(req.body);
     bookController.addBook(req.body, res);
 });
 
@@ -89,8 +88,8 @@ app.get('/booxtown/book/book_getall', function(req, res){
     bookController.Book_GetAll(res);
 });
 
-app.delete('/booxtown/book/book_delete', function(req, res){
-    bookController.Book_Delete(req.query.book_id, res);
+app.post('/booxtown/rest/book/book_delete', function(req, res){
+    bookController.Book_Delete(req.body.book_id, res);
 });
 
 app.get('/booxtown/book/book_filter', function(req, res){
@@ -168,15 +167,15 @@ app.get('/booxtown/comment/comment_getbyid', function(req, res){
     commentController.Comment_GetByID(req.query.commentid, res);
 });
 
-app.get('/booxtown/comment/comment_getbythread', function(req, res){
-    commentController.Comment_GetByThread(req.query.threadid, res);
+app.get('/booxtown/rest/comment/comment_getbythread', function(req, res){
+    commentController.Comment_GetByThread(req.query.thread_id, res);
 });
 
 app.get('/booxtown/comment/comment_getbyuser', function(req, res){
     commentController.Comment_GetByUser(req.query.userid, res);
 });
 
-app.post('/booxtown/comment/comment_insert', function(req, res){
+app.post('/booxtown/rest/comment/comment_insert', function(req, res){
     commentController.Comment_Insert(req.body, res);
 });
 
@@ -252,11 +251,12 @@ app.get('/booxtown/thread/thread_getbyid', function(req, res){
     threadController.Thread_GetByID(req.query.threadid, res);
 });
 
-app.get('/booxtown/thread/thread_getbytopic', function(req, res){
-    threadController.Thread_GetByTopic(req.query.topicid, res);
+app.get('/booxtown/rest/thread/thread_getbytopic', function(req, res){
+    threadController.Thread_GetByTopic(req.query.topic_id, res);
 });
 
-app.post('/booxtown/thread/thread_insert', function(req, res){
+app.post('/booxtown/rest/thread/thread_insert', function(req, res){
+    console.log(req.body);
     threadController.Thread_Insert(req.body, res);
 });
 
@@ -268,15 +268,15 @@ app.post('/booxtown/thread/thread_update', function(req, res){
     threadController.Thread_Update(req.body, res);
 });
 
-app.delete('/booxtown/topic/topic_delete', function(req, res){
+app.delete('/booxtown/rest/topic/topic_delete', function(req, res){
     topicController.Topic_Delete(req.query.topicid, res);
 });
 
-app.get('/booxtown/topic/topic_filter', function(req, res){
+app.get('/booxtown/rest/topic/topic_filter', function(req, res){
     topicController.Topic_Filter(req.query, res);
 });
 
-app.get('/booxtown/topic/topic_getall', function(req, res){
+app.get('/booxtown/rest/topic/topic_getall', function(req, res){
     topicController.Topic_GetAll(res);
 });
 
@@ -417,7 +417,6 @@ var storage = multer.diskStorage({
     },
     filename: function(req, file, cb ) {
         return cb(null, file.originalname.split("::")[1]);
-
     }
 });
 
@@ -425,7 +424,7 @@ var storage = multer.diskStorage({
 app.post('/booxtown/rest/uploadimage', multer({
     storage: storage
 }).single(''), function (req, res) {
-    //cons;ole.log(req.body.name);
+    console.log(storage);
     res.json({code: 200});
 });
 

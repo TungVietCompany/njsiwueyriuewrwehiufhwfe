@@ -4,108 +4,118 @@
 var md5 = require('../Library/MD5');
 var sessionDao = require('./SessionDAO');
 
-function Comment_Delete(commentid, connection, callback){
-    connection.query("call Comment_Delete('" + commentid + "')", function(err, rows){
-        if(err){
+function Comment_Delete(commentid, connection, callback) {
+    connection.query("call Comment_Delete('" + commentid + "')", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows.affectedRows);
         }
     });
 }
 
-function Comment_Filter(comment, connection, callback){
+function Comment_Filter(comment, connection, callback) {
     var query = "call Comment_Filter('" + (comment.commentid ? comment.commentid : 'null') + "', '"
         + (comment.createDate ? comment.createDate : 'null')
         + "', '" + (comment.threadid ? comment.threadid : 'null') + "', '" + (comment.userid ? comment.userid : 'null') + "')";
-    connection.query(query, function(err, rows){
-        if(err){
+    connection.query(query, function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Comment_GetAll(connection, callback){
-    connection.query("call Comment_GetAll()", function(err, rows){
-        if(err){
+function Comment_GetAll(connection, callback) {
+    connection.query("call Comment_GetAll()", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Comment_GetByDate(fromDate, toDate, connection, callback){
+function Comment_GetByDate(fromDate, toDate, connection, callback) {
     connection.query("call Comment_GetByDate('" + (fromDate ? fromDate : 'null') + "', '"
-    + (toDate ? toDate : 'null') + "')", function(err, rows){
-        if(err){
+        + (toDate ? toDate : 'null') + "')", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Comment_GetByID(commentID, connection, callback){
-    connection.query("call Comment_GetById('" + commentID + "')", function(err, rows){
-        if(err){
+function Comment_GetByID(commentID, connection, callback) {
+    connection.query("call Comment_GetById('" + commentID + "')", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Comment_GetByThread(threadID, connection, callback){
-    connection.query("call Comment_GetByThread('" + threadID + "')", function(err, rows){
-        if(err){
+function Comment_GetByThread(threadID, connection, callback) {
+    connection.query("call Comment_GetByThread('" + threadID + "')", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Comment_GetByUser(userID, connection, callback){
-    connection.query("call Comment_GetByUser('" + userID + "')", function(err, rows){
-        if(err){
+function Comment_GetByUser(userID, connection, callback) {
+    connection.query("call Comment_GetByUser('" + userID + "')", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Comment_Insert(comment, connection, callback){
-    var query = "call Comment_Insert('" + comment.commentid + "', '" + comment.content + "', '" + comment.createDate + "', '"
-        + comment.threadid + "', '" + comment.userid + "')";
-    connection.query(query, function(err, rows){
-        if(err){
+function Comment_Insert(comment, connection, callback) {
+
+    sessionDao.getUserIdBySessionId(comment.session_id, connection, function (response) {
+        if (response != 701) {
+            var query = "call Comment_Insert('" + md5.getMD5ByTime(comment.session_id + response)
+            + "', '" + comment.content + "', now(), '"
+            + comment.thread_id + "', '" + response + "')";
+            connection.query(query, function (err, rows) {
+                if (err) {
+                    callback(701);
+                }
+                else {
+                    callback(200);
+                }
+            });
+        }
+        else {
             callback(701);
         }
-        else{
-            callback(rows.affectedRows);
-        }
     });
+
 }
 
-function Comment_Update(comment, connection, callback){
+function Comment_Update(comment, connection, callback) {
     var query = "call Comment_Update('" + comment.commentid + "', '" + comment.content + "', '" + comment.createDate + "', '"
         + comment.threadid + "', '" + comment.userid + "')";
-    connection.query(query, function(err, rows){
-        if(err){
+    connection.query(query, function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows.affectedRows);
         }
     });
