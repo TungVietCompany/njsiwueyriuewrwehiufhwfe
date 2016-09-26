@@ -89,6 +89,25 @@ function getUserInforById(user_id,connection,callback) {
         });
 }
 
+function getTokenForUser(user_id,connection,callback) {
+    connection.query("CALL getTokenForUser(" + user_id +")"
+        , function (err, rows) {
+            if (err) {
+                console.log(err);
+                callback(701);
+            }
+            console.log(rows[0]);
+            if(user_id != null)
+            {
+                callback(rows[0][0]);
+            }
+            else
+            {
+                callback(701);
+            }
+        });
+}
+
 function updateUserInfo(session_id,user,connection,callback) {
     sessionDao.getUserIdBySessionId(session_id,connection,function (response) {
         if(response != 701)
@@ -329,3 +348,4 @@ module.exports.User_GetByUserSession = User_GetByUserSession;
 module.exports.User_Insert = User_Insert;
 module.exports.User_Update = User_Update;
 module.exports.User_UpdateByUserSession = User_UpdateByUserSession;
+module.exports.getTokenForUser = getTokenForUser;

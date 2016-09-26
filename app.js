@@ -4,6 +4,7 @@ var emailController = require('./ServerController/EmailController');
 var commentController = require('./ServerController/CommentController');
 var postController = require('./ServerController/PostController');
 var threadController = require('./ServerController/ThreadController');
+var firebaseController = require('./ServerController/FirebaseController');
 var topicController = require('./ServerController/TopicController');
 var transHisController = require('./ServerController/TransacHistoryController');
 var connection = require('./DatabaseConnection/MysqlConnection');
@@ -22,7 +23,10 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var multer = require('multer');
 
-
+// Notification
+app.post('/booxtown/rest/user/send_notification', function (req, res) {
+    firebaseController.sendMultiUser(req.body,res);
+});
 //User Service
 
 
