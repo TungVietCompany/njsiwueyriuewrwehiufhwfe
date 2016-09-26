@@ -41,6 +41,18 @@ function Topic_GetAll(connection, callback){
     });
 }
 
+function Topic_GetTop(topic,connection, callback){
+    connection.query("call sp_GetTopTopic(" + topic.top +"," +topic.from +"," + topic.user_id +
+        ")", function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows[0]);
+        }
+    });
+}
+
 function Topic_GetByDate(fromDate, toDate, connection, callback){
     connection.query("call Topic_GetByDate('" + (fromDate ? fromDate : 'null') + "', '"
     + (toDate ? toDate : 'null') + "')", function(err, rows){
@@ -133,7 +145,7 @@ function Topic_Update(topic, connection, callback){
     });
 }
 
-
+module.exports.Topic_GetTop = Topic_GetTop;
 module.exports.Topic_Delete = Topic_Delete;
 module.exports.Topic_Filter = Topic_Filter;
 module.exports.Topic_GetAll = Topic_GetAll;

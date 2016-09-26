@@ -39,6 +39,20 @@ function Topic_GetAll(res) {
     });
 }
 
+function Topic_GetTop(topic,res) {
+    topicDao.Topic_GetTop(topic,connection, function (response) {
+        if (response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            var listTopic = [];
+        var i = 0;
+        for (i = 0; i < response.length; i++) {
+            listTopic.push(response[i]);
+        }
+        res.json({code: 200, topic: listTopic});
+    });
+}
+
 function Topic_GetByDate(fromDate, toDate, res) {
     topicDao.Topic_GetByDate(fromDate, toDate, connection, function (response) {
         if (response == 701)
@@ -102,6 +116,7 @@ function Topic_Update(topic, userid, res) {
     });
 }
 
+module.exports.Topic_GetTop = Topic_GetTop;
 module.exports.Topic_Delete = Topic_Delete;
 module.exports.Topic_Filter = Topic_Filter;
 module.exports.Topic_GetAll = Topic_GetAll;

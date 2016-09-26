@@ -42,6 +42,10 @@ app.post('/booxtown/rest/user/login', function (req, res) {
     userController.login(req.body, res);
 });
 
+app.post('/booxtown/rest/user/login_firebase', function (req, res) {
+    userController.login_firebase(req.body, res);
+});
+
 app.get('/booxtown/rest/user/getprofile', function (req, res) {
     userController.getUserInforById(req.query.session_id, res);
 });
@@ -78,7 +82,6 @@ app.post('/booxtown/rest/book/addbook_ios', function (req, res) {
 });
 
 app.post('/booxtown/rest/book/update', function (req, res) {
-    console.log(req.body);
     bookController.updateBook(req.body, res);
 });
 
@@ -243,6 +246,10 @@ app.get('/booxtown/thread/thread_filter', function(req, res){
     threadController.Thread_Filter(req.query, res);
 });
 
+app.get('/booxtown/rest/thread/thread_gettop', function(req, res){
+    threadController.Thread_GetTop(req.query, res);
+});
+
 app.get('/booxtown/thread/thread_getall', function(req, res){
     threadController.Thread_GetAll(res);
 });
@@ -259,8 +266,15 @@ app.get('/booxtown/rest/thread/thread_getbytopic', function(req, res){
     threadController.Thread_GetByTopic(req.query.topic_id, res);
 });
 
+app.post('/booxtown/rest/thread/thread_addstatus', function(req, res){
+    threadController.Thread_AddStatus(req.query, res);
+});
+
+app.post('/booxtown/rest/thread/thread_removetatus', function(req, res){
+    threadController.Thread_RemoveStatus(req.body, res);
+});
+
 app.post('/booxtown/rest/thread/thread_insert', function(req, res){
-    console.log(req.body);
     threadController.Thread_Insert(req.body, res);
 });
 
@@ -282,6 +296,10 @@ app.get('/booxtown/rest/topic/topic_filter', function(req, res){
 
 app.get('/booxtown/rest/topic/topic_getall', function(req, res){
     topicController.Topic_GetAll(res);
+});
+
+app.get('/booxtown/rest/topic/topic_gettop', function(req, res){
+    topicController.Topic_GetTop(req.query,res);
 });
 
 app.get('/booxtown/topic/topic_getbydate', function(req, res){
@@ -408,8 +426,8 @@ app.get('/booxtown/rest/book/getallbook', function (req, res) {
 //Upload Image
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        var forderName = file.originalname.split("::");
-        var link = './Images/'+forderName[0];
+        var forderName = file.originalname.split("_+_");
+        var link = forderName.length == 1 ? './Images/' : './Images/'+forderName[0];
         try {
             var stats = fs.lstatSync(link);
         }
@@ -420,16 +438,27 @@ var storage = multer.diskStorage({
         callback(null, link);
     },
     filename: function(req, file, cb ) {
-        return cb(null, file.originalname.split("::")[1]);
+        var forderName = file.originalname.split("_+_");
+        return forderName.length == 1 ? cb(null, file.originalname) :cb(null, file.originalname.split("_+_")[1]);
     }
 });
 
+// var storage = multer.diskStorage({
+//     destination: function (req, file, callback) {
+//         var forderName = file.originalname;
+//         var link = './Images/';
+//
+//         callback(null, link);
+//     },
+//     filename: function(req, file, cb ) {
+//         return cb(null, file.originalname);
+//     }
+// });
 
 app.post('/booxtown/rest/uploadimage', multer({
     storage: storage
-}).single(''), function (req, res) {
-    console.log(storage);
-    res.json({code: 200});
+}).array('images',3), function (req, res) {
+    res.json({code: 200,description :"Success"});
 });
 
 app.get('/booxtown/rest/getImage', function (req, res) {
@@ -447,6 +476,17 @@ app.get('/booxtown/rest/getImage', function (req, res) {
     }
 });
 
+app.post('/booxtown/rest/deleteimage', function (req, res) {
+    try {
+        var link = './Images/' + req.body.username + '/' + req.body.image ;
+        fs.unlinkSync(link);
+        res.json({code:200,description:'Success'});
+    }
+    catch (err)
+    {
+        res.json({code:701,description:'Failed'});
+    }
+});
 
 process.on('uncaughtException', function (err) {
     console.log(err);

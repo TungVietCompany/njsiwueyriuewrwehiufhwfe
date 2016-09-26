@@ -11,8 +11,8 @@ function signup(user, res) {
     userDao.checkUserExits(user.username, connection, function (response) {
         if (response == 200) {
             userDao.insertUser(user, connection, function (response) {
-                if (response != 701) {
-                    userDao.insertUserSession(response, connection, function (response) {
+                if (response != '_701_') {
+                    userDao.insertUserSession(response,user.session_id, connection, function (response) {
                         if (response != 701) {
                             res.json(new ResponseData(200, "Đăng ký thành công", response));
                         }
@@ -39,6 +39,17 @@ function signup(user, res) {
 
 function login(user, res) {
     userDao.userLogin(user, connection, function (response) {
+        if (response != 701) {
+            res.json(new ResponseData(200, "Đăng nhập thành công", response));
+        }
+        else {
+            res.json(new ResponseData(701, "Đăng nhập thất bại", ""));
+        }
+    });
+}
+
+function login_firebase(user, res) {
+    userDao.userLogin_firebase(user, connection, function (response) {
         if (response != 701) {
             res.json(new ResponseData(200, "Đăng nhập thành công", response));
         }
@@ -241,6 +252,7 @@ function User_UpdateByUserSession(user, res){
     });
 }
 
+module.exports.login_firebase = login_firebase;
 module.exports.userLogout = userLogout;
 module.exports.changePassword = changePassword;
 module.exports.updateUserInforById = updateUserInforById;
