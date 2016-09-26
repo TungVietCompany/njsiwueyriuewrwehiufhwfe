@@ -63,6 +63,45 @@ function getAllBookByUserId(session_id,res) {
     });
 }
 
+function getTopBookByUser(book,res) {
+    bookDao.getTopBookByUser(book,connection,function (response) {
+        if(response != 701)
+        {
+            var listBook = [];
+            var i = 0;
+            for(i = 0;i<response.length;i++)
+            {
+                listBook.push(response[i]);
+            }
+            res.json({code: 200, book: listBook});
+        }
+        else
+        {
+            res.json(new ResponseData(701, "Không tồn tại book cần tìm", ""));
+        }
+    });
+}
+
+
+function getTopBook(book,res) {
+    bookDao.getTopBook(book,connection,function (response) {
+        if(response != 701)
+        {
+            var listBook = [];
+            var i = 0;
+            for(i = 0;i<response.length;i++)
+            {
+                listBook.push(response[i]);
+            }
+            res.json({code: 200, book: listBook});
+        }
+        else
+        {
+            res.json(new ResponseData(701, "Không tồn tại book cần tìm", ""));
+        }
+    });
+}
+
 function getAllBook(res) {
     bookDao.getAllBook(connection,function (response) {
         if(response != 701)
@@ -209,7 +248,10 @@ function Book_Update(book, res){
             res.json(response);
     });
 }
+
+module.exports.getTopBookByUser = getTopBookByUser;
 module.exports.getAllBook = getAllBook;
+module.exports.getTopBook = getTopBook;
 module.exports.updateBook = updateBook;
 module.exports.getAllBookByUserId = getAllBookByUserId;
 module.exports.getBookInfoById = getBookInfoById;

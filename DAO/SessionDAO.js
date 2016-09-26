@@ -1,4 +1,5 @@
 function getUserIdBySessionId(session_id,connection,callback) {
+
     connection.query("SELECT func_getUserIdFromSession_id('" + session_id +"') as data"
         , function (err, rows) {
             if (err) {

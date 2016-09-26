@@ -42,13 +42,61 @@ function Topic_GetAll(connection, callback){
 }
 
 function Topic_GetTop(topic,connection, callback){
-    connection.query("call sp_GetTopTopic(" + topic.top +"," +topic.from +"," + topic.user_id +
-        ")", function(err, rows){
-        if(err){
+    sessionDao.getUserIdBySessionId(topic.session_id,connection,function (response) {
+        if(response != '_701_') {
+            connection.query("call sp_GetTopTopic(" + topic.top + "," + topic.from + "," + response +
+                ")", function (err, rows) {
+                if (err) {
+                    callback(701);
+                }
+                else {
+                    callback(rows[0]);
+                }
+            });
+        }
+        else
+        {
             callback(701);
         }
-        else{
-            callback(rows[0]);
+    });
+}
+
+function Topic_RemoveStatus(topic, connection, callback){
+    sessionDao.getUserIdBySessionId(topic.session_id,connection,function (response) {
+        if(response != '_701_') {
+            var query = "call sp_UnreadTopic(" + topic.topic_id + "," + response + ")";
+            connection.query(query, function (err, rows) {
+                if (err) {
+                    callback(701);
+                }
+                else {
+                    callback(200);
+                }
+            });
+        }
+        else
+        {
+            callback(701);
+        }
+    });
+}
+
+function Topic_AddStatus(topic, connection, callback){
+    sessionDao.getUserIdBySessionId(topic.session_id,connection,function (response) {
+        if(response != '_701_') {
+            var query = "call sp_AddStatusTopic(" + topic.topic_id + "," + response + ")";
+            connection.query(query, function (err, rows) {
+                if (err) {
+                    callback(701);
+                }
+                else {
+                    callback(200);
+                }
+            });
+        }
+        else
+        {
+            callback(701);
         }
     });
 }
@@ -145,6 +193,8 @@ function Topic_Update(topic, connection, callback){
     });
 }
 
+module.exports.Topic_AddStatus = Topic_AddStatus;
+module.exports.Topic_RemoveStatus = Topic_RemoveStatus;
 module.exports.Topic_GetTop = Topic_GetTop;
 module.exports.Topic_Delete = Topic_Delete;
 module.exports.Topic_Filter = Topic_Filter;

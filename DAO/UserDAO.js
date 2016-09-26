@@ -46,12 +46,10 @@ function userLogin(user, connection, callback) {
                 callback(701);
             }
             try{
-
-                var session_id = md5.getMD5ByTime(user.username);
-                updateUserSession(rows[0][0].id,session_id,user.device_type,connection,function (response) {
+                updateUserSession(rows[0][0].id,user.session_id,user.device_type,connection,function (response) {
                     if(response == 200)
                     {
-                        callback(session_id);
+                        callback(user.session_id);
                     }
                 });
             }catch(e) {

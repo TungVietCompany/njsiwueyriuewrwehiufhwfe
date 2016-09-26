@@ -71,7 +71,45 @@ function getBookInfoById(book,connection,callback) {
     });
 }
 
+function getTopBookByUser(book,connection,callback) {
+    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
+        if(response != '_701_')
+        {
+            var query = "call sp_getTopBookByUser("+ book.top + ","+ book.from + ","+ response +")";
+            connection.query(query
+                , function (err, rows) {
+                    if (err) {
+                        callback(701);
+                    }
+                    callback(rows[0]);
+                });
+        }
+        else
+        {
+            callback(701);
+        }
+    });
+}
 
+function getTopBook(book,connection,callback) {
+    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
+        if(response != '_701_')
+        {
+            var query = "call sp_GetTopBook("+ book.top + ","+ book.from +")";
+            connection.query(query
+                , function (err, rows) {
+                    if (err) {
+                        callback(701);
+                    }
+                    callback(rows[0]);
+                });
+        }
+        else
+        {
+            callback(701);
+        }
+    });
+}
 
 
 function getAllBookByUserId(session_id,connection,callback) {
@@ -314,7 +352,8 @@ function Book_Update(book, connection, callback){
     });
 }
 
-
+module.exports.getTopBookByUser = getTopBookByUser;
+module.exports.getTopBook = getTopBook;
 module.exports.getAllBookByUserId = getAllBookByUserId;
 module.exports.getBookInfoById = getBookInfoById;
 module.exports.addBook = addBook;

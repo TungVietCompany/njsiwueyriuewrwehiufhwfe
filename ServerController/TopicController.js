@@ -53,6 +53,24 @@ function Topic_GetTop(topic,res) {
     });
 }
 
+function Topic_AddStatus(topic, res){
+    topicDao.Topic_AddStatus(topic, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Failed", ""));
+        else
+            res.json(new ResponseData(200, "Success", ""));
+    });
+}
+
+function Topic_RemoveStatus(topic, res){
+    topicDao.Topic_RemoveStatus(topic, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Failed", ""));
+        else
+            res.json(new ResponseData(200, "Success", ""));
+    });
+}
+
 function Topic_GetByDate(fromDate, toDate, res) {
     topicDao.Topic_GetByDate(fromDate, toDate, connection, function (response) {
         if (response == 701)
@@ -116,6 +134,8 @@ function Topic_Update(topic, userid, res) {
     });
 }
 
+module.exports.Topic_AddStatus = Topic_AddStatus;
+module.exports.Topic_RemoveStatus = Topic_RemoveStatus;
 module.exports.Topic_GetTop = Topic_GetTop;
 module.exports.Topic_Delete = Topic_Delete;
 module.exports.Topic_Filter = Topic_Filter;

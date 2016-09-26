@@ -88,12 +88,26 @@ function Post_GetByUserSession(session_id, res){
     });
 }
 
-function Post_Insert(post, res){
-    postDao.Post_Insert(post, connection, function(response){
+function Post_GetTop(post, res){
+    postDao.Post_GetTop(post, connection, function(response){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
-            res.json(response);
+            var listPost = [];
+        var i = 0;
+        for (i = 0; i < response.length; i++) {
+            listPost.push(response[i]);
+        }
+        res.json({code:200,post : listPost});
+    });
+}
+
+function Post_Insert(post, res){
+    postDao.Post_Insert(post, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error", ""));
+        else
+            res.json(new ResponseData(200, "Success", ""));
     });
 }
 
@@ -115,6 +129,7 @@ function Post_Update(post, res){
     });
 }
 
+module.exports.Post_GetTop = Post_GetTop;
 module.exports.Post_Delete = Post_Delete;
 module.exports.Post_Filter = Post_Filter;
 module.exports.Post_GetAll = Post_GetAll;
