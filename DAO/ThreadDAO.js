@@ -30,6 +30,19 @@ function Thread_Filter(thread, connection, callback){
     });
 }
 
+function Thread_GetTop(thread, connection, callback){
+    var query = "call sp_GetTopThread(" + thread.topic_id + "," +
+        thread.top +"," + thread.from +"," + thread.user_id +")";
+    connection.query(query, function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(rows[0]);
+        }
+    });
+}
+
 function Thread_GetAll(connection, callback){
     connection.query("call Thread_GetAll()", function(err, rows){
         if(err){
@@ -77,10 +90,11 @@ function Thread_GetByTopic(topicid, connection, callback){
 
 function Thread_Insert(thread, connection, callback){
     sessionDao.getUserIdBySessionId(thread.session_id,connection,function (response) {
-        if(response != 701)
+
+        if(response != '_701_')
         {
-            var query = "call Thread_Insert('" +  md5.getMD5ByTime(thread.title + thread.session_id) + "', '" + thread.title + "', '" + thread.description +"',"
-                +  "now(), '" + thread.topic_id + "','"+ response +"',0)";
+            var query = "call Thread_Insert('" + thread.title + "', '" + thread.description +"',"
+                +  "now(), " + thread.topic_id + ","+ response +",0)";
             connection.query(query, function(err, rows){
                 if(err){
                     callback(701);
@@ -97,6 +111,20 @@ function Thread_Insert(thread, connection, callback){
     });
 
 }
+
+function Thread_RemoveStatus(thread, connection, callback){
+    var query = "call sp_UnreadThread(" + thread.thread_id  + "," + thread.user_id +")";
+    connection.query(query, function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
+            callback(200);
+        }
+    });
+
+}
+
 
 function Thread_Search(titleKeyword, descrKeyword, connection, callback){
     var query = "call Thread_Search('" + (titleKeyword ? titleKeyword : 'null') + "', '"
@@ -124,7 +152,8 @@ function Thread_Update(thread, connection, callback){
     });
 }
 
-
+module.exports.Thread_RemoveStatus = Thread_RemoveStatus;
+module.exports.Thread_GetTop = Thread_GetTop;
 module.exports.Thread_Delete = Thread_Delete;
 module.exports.Thread_Filter = Thread_Filter;
 module.exports.Thread_GetAll = Thread_GetAll;

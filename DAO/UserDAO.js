@@ -2,19 +2,19 @@ var md5 = require('../Library/MD5');
 var sessionDao = require('./SessionDAO');
 
 function insertUser(user, connection, callback) {
-    var user_id = md5.getMD5ByTime(user.username);
-    connection.query("call sp_insertUser('" + user_id + "','" + user.first_name + "','" + user.last_name + "','"
-        + user.username + "','" + user.email + "','" + user.birthday + "','" + user.phone + "','" + user.password + "',0,1,NOW())"
+
+    var query = "call sp_insertUser('" + user.first_name + "','" + user.last_name + "','"
+        + user.username + "','" + user.email + "','" + user.birthday + "','" + user.phone + "','" + user.password + "',0,1,NOW())";
+    connection.query(query
         , function (err, rows) {
             if (err) {
-                callback(701);
+                callback('_701_');
             }
-            callback(user_id);
+            callback(rows[0][0].id);
         });
 }
 
 function checkUserExits(username, connection, callback) {
-
     connection.query("call sp_checkUserExits('" + username + "')", function (err, rows) {
         if (err) {
             callback(701);
@@ -29,9 +29,8 @@ function checkUserExits(username, connection, callback) {
     });
 }
 
-function insertUserSession(user_id, connection, callback) {
-    var session_id = md5.getMD5ByTime(user_id);
-    connection.query("call sp_insertUserSession('" + md5.getMD5ByTime('') + "','" + user_id + "','"+session_id+"','')"
+function insertUserSession(user_id,session_id, connection, callback) {
+    connection.query("call sp_insertUserSession('" + user_id + "','"+session_id+"','')"
         , function (err, rows) {
             if (err) {
                 callback(701);
@@ -53,6 +52,25 @@ function userLogin(user, connection, callback) {
                     if(response == 200)
                     {
                         callback(session_id);
+                    }
+                });
+            }catch(e) {
+                callback(701);
+            }
+        });
+}
+
+function userLogin_firebase(user, connection, callback) {
+    connection.query("call sp_checkLoginValid('" + user.username + "','" + user.password + "')"
+        , function (err, rows) {
+            if (err) {
+                callback(701);
+            }
+            try{
+                updateUserSession(rows[0][0].id,user.session_id,user.device_type,connection,function (response) {
+                    if(response == 200)
+                    {
+                        callback(user.session_id);
                     }
                 });
             }catch(e) {
@@ -110,26 +128,28 @@ function updateUserInfo(session_id,user,connection,callback) {
 }
 
 function checkValidUsernameAndOldPassword(session_id,pwd_old,connection,callback) {
+    console.log(session_id + "  "+pwd_old);
     connection.query("CALL sp_checkValidUsernameAndOldPassword('" + session_id +"','"+pwd_old+"')"
         , function (err, rows) {
             if (err) {
                 callback(701);
             }
             try{
+                console.log(rows[0]);
                 var user_id = JSON.stringify(rows[0][0].id);
                 callback(rows[0][0].id);
             }catch (e)
             {
-                callback(701);
+                callback('_701_');
             }
         });
 }
 
 function changePassword(user,connection,callback) {
     checkValidUsernameAndOldPassword(user.session_id,user.pwd_old,connection,function (response) {
-        if(response != 701)
+        if(response != '_701_')
         {
-            connection.query("call sp_resetPassword('" + response + "','" + user.pwd_new + "')"
+            connection.query("call sp_resetPassword(" + response + ",'" + user.pwd_new + "')"
                 , function (err, rows) {
                     if (err) {
                         callback(701);
@@ -146,7 +166,7 @@ function changePassword(user,connection,callback) {
 
 function userLogout(user,connection,callback) {
     sessionDao.getUserIdBySessionId(user.session_id,connection,function (response) {
-        if(response != 701)
+        if(response != '_701_')
         {
             connection.query("call sp_userLogout('" + user.session_id + "')"
                 , function (err, rows) {
@@ -311,6 +331,8 @@ function User_UpdateByUserSession(user, connection, callback){
             callback(701);
     });
 }
+
+module.exports.userLogin_firebase = userLogin_firebase;
 module.exports.userLogout = userLogout;
 module.exports.changePassword = changePassword;
 module.exports.updateUserInfo = updateUserInfo;

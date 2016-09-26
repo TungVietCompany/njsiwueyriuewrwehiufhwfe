@@ -1,7 +1,1 @@
-var connection = require('./DatabaseConnection/MysqlConnection');
-connection.connect();
-
-
-console.log();
-
-//1473429344
+console.log('cmqnLj7lV2Q:APA91bGVsH-B1d5qkYFWdfjEG68ngHAN0GkUbAP-gOqj9YwBlm5BnYBIUOha_iwiggkae5mJ8eNp2_pfNFbnH1TazZ89gETCI9ZJwIVfyfpTZlb-GOl15ajIXXADoiOrIwlZ1_8EWX7y'.length);

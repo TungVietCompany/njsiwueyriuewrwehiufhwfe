@@ -25,6 +25,15 @@ function Thread_Filter(thread, res){
     });
 }
 
+function Thread_GetTop(thread, res){
+    threadDao.Thread_GetTop(thread, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            res.json(response);
+    });
+}
+
 function Thread_GetAll(res){
     threadDao.Thread_GetAll(connection, function(response){
         if(response == 701)
@@ -69,9 +78,27 @@ function Thread_GetByTopic(topicid, res){///////////////////
 function Thread_Insert(thread, res){
     threadDao.Thread_Insert(thread, connection, function(response){
         if(response == 701)
-            res.json(new ResponseData(701, "Error!", ""));
+            res.json(new ResponseData(701, "Failed", ""));
         else
-            res.json(new ResponseData(200, "Success!", ""));
+            res.json(new ResponseData(200, "Success", ""));
+    });
+}
+
+function Thread_AddStatus(thread, res){
+    threadDao.Thread_AddStatus(thread, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Failed", ""));
+        else
+            res.json(new ResponseData(200, "Success", ""));
+    });
+}
+
+function Thread_RemoveStatus(thread, res){
+    threadDao.Thread_RemoveStatus(thread, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Failed", ""));
+        else
+            res.json(new ResponseData(200, "Success", ""));
     });
 }
 
@@ -93,6 +120,9 @@ function Thread_Update(thread, res){
     });
 }
 
+module.exports.Thread_AddStatus = Thread_AddStatus;
+module.exports.Thread_RemoveStatus = Thread_RemoveStatus;
+module.exports.Thread_GetTop = Thread_GetTop;
 module.exports.Thread_Delete = Thread_Delete;
 module.exports.Thread_Filter = Thread_Filter;
 module.exports.Thread_GetAll = Thread_GetAll;
