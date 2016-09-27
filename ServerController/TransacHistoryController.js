@@ -84,7 +84,16 @@ function TransacHistory_Insert(tranHis, res){
         if(response == 701)
             res.json(new ResponseData(701, "Error!", ""));
         else
-            res.json(response);
+            res.json(new ResponseData(200, "Success!", ""));
+    });
+}
+
+function TransacHistory_UpdateStatus(tranHis, res){
+    transHisDao.TransacHistory_UpdateStatus(tranHis, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            res.json(new ResponseData(200, "Success!", ""));
     });
 }
 
@@ -97,6 +106,7 @@ function TransacHistory_Update(tranHis, res){
     });
 }
 
+module.exports.TransacHistory_UpdateStatus = TransacHistory_UpdateStatus;
 module.exports.TransacHistory_Delete = TransacHistory_Delete;
 module.exports.TransacHistory_Filter = TransacHistory_Filter;
 module.exports.TransacHistory_GetAll = TransacHistory_GetAll;

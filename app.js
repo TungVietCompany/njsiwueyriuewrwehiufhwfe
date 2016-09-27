@@ -81,6 +81,10 @@ app.post('/booxtown/rest/book/addbook_ios', function (req, res) {
     bookController.addBook_ios(req.query, res);
 });
 
+app.post('/booxtown/rest/book/bookTransfer', function (req, res) {
+    bookController.bookTransfer(req.body, res);
+});
+
 app.post('/booxtown/rest/book/update', function (req, res) {
     bookController.updateBook(req.body, res);
 });
@@ -374,8 +378,12 @@ app.get('/booxtown/transactionhistory/tranhis_getbyaccepted', function(req, res)
     transHisController.TransacHistory_GetByAccepted(req.query.isaccepted, res);
 });
 
-app.post('/booxtown/transactionhistory/tranhis_insert', function(req, res){
+app.post('/booxtown/rest/transaction/transaction_insert', function(req, res){
     transHisController.TransacHistory_Insert(req.body, res);
+});
+
+app.post('/booxtown/rest/transaction/transaction_updateStatus', function(req, res){
+    transHisController.TransacHistory_UpdateStatus(req.body, res);
 });
 
 app.post('/booxtown/transactionhistory/tranhis_update', function(req, res){
@@ -507,6 +515,7 @@ app.post('/booxtown/rest/deleteimage', function (req, res) {
         res.json({code:701,description:'Failed'});
     }
 });
+
 
 process.on('uncaughtException', function (err) {
     console.log(err);
