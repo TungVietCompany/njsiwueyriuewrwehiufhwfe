@@ -1,6 +1,7 @@
 var connection = require('../DatabaseConnection/MysqlConnection');
 var userDao = require('../DAO/UserDAO');
 var sessionDao = require('../DAO/SessionDAO');
+var settingDao = require('../DAO/SettingDAO');
 var ResponseData = require('../DAO/ResponseData');
 var md5 = require('../Library/MD5');
 //connection.connect();
@@ -14,7 +15,15 @@ function signup(user, res) {
                 if (response != '_701_') {
                     userDao.insertUserSession(response,user.session_id, connection, function (response) {
                         if (response != 701) {
-                            res.json(new ResponseData(200, "Đăng ký thành công", response));
+                            settingDao.Setting_Insert(user.session_id, connection, function (response) {
+                                if (response != 701) {
+
+                                    res.json(new ResponseData(200, "Đăng ký thành công", response));
+                                }
+                                else {
+                                    res.json(err);
+                                }
+                            });
                         }
                         else {
                             res.json(err);

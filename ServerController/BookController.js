@@ -16,6 +16,19 @@ function addBook(book,res) {
     });
 }
 
+function bookTransfer(book,res) {
+    bookDao.bookTransfer(book,connection,function (response) {
+        if(response != 701)
+        {
+            res.json(new ResponseData(200, "Success", ""));
+        }
+        else
+        {
+            res.json(new ResponseData(701, "Failed", ""));
+        }
+    });
+}
+
 function getBookInfoById(book,res) {
     bookDao.getBookInfoById(book,connection,function (response) {
         if(response != 701)
@@ -249,6 +262,7 @@ function Book_Update(book, res){
     });
 }
 
+module.exports.bookTransfer = bookTransfer;
 module.exports.getTopBookByUser = getTopBookByUser;
 module.exports.getAllBook = getAllBook;
 module.exports.getTopBook = getTopBook;
