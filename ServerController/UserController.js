@@ -34,7 +34,18 @@ function signup(user, res) {
 
 
 }
-
+function getUserID(topic, res){
+    sessionDao.getUserIdBySessionId(topic.session_id,connection,function (response) {
+        if (response != 701) {
+            var user_id = response;
+            res.json({code: 200, user_id: user_id});
+        }
+        else
+        {
+            res.json(new ResponseData(701, "Session ID không tồn tại", ""));
+        }
+    });
+}
 //Login
 
 function login(user, res) {
@@ -271,3 +282,4 @@ module.exports.User_GetByUserSession = User_GetByUserSession;
 module.exports.User_Insert = User_Insert;
 module.exports.User_Update = User_Update;
 module.exports.User_UpdateByUserSession = User_UpdateByUserSession;
+module.exports.getUserID=getUserID
