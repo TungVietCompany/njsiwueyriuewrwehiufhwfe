@@ -7,6 +7,7 @@ var threadController = require('./ServerController/ThreadController');
 var firebaseController = require('./ServerController/FirebaseController');
 var topicController = require('./ServerController/TopicController');
 var transHisController = require('./ServerController/TransacHistoryController');
+var settingController = require('./ServerController/SettingController');
 var connection = require('./DatabaseConnection/MysqlConnection');
 
 var MD5 = require('./Library/MD5');
@@ -454,6 +455,20 @@ app.get('/booxtown/rest/book/book_gettop', function (req, res) {
 
 app.get('/booxtown/rest/book/book_gettopbyuser', function (req, res) {
     bookController.getTopBookByUser(req.query,res);
+});
+
+//setting
+
+app.get('/booxtown/rest/setting/getSettingByUserId', function (req, res) {
+    settingController.getSettingByUserId(req.query.session_id,res);
+});
+
+app.post('/booxtown/rest/setting/setting_insert', function (req, res) {
+    settingController.getTopBookByUser(req.body,res);
+});
+
+app.post('/booxtown/rest/setting/setting_update', function (req, res) {
+    settingController.Setting_Update(req.body,res);
 });
 
 //Upload Image

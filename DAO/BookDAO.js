@@ -53,7 +53,7 @@ function addBook_ios(book,connection,callback) {
 
 function getBookInfoById(book,connection,callback) {
     sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
-        if(response != 701)
+        if(response != '_701_')
         {
             var query = "call sp_getBookById('" + book.book_id + "','"+ response +"')";
             connection.query(query

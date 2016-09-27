@@ -177,7 +177,7 @@ function Post_Update(post, connection, callback) {
     });
 }
 
-module.exports.Post_GetTop = Post_GetTop
+module.exports.Post_GetTop = Post_GetTop;
 module.exports.Post_Delete = Post_Delete;
 module.exports.Post_Filter = Post_Filter;
 module.exports.Post_GetAll = Post_GetAll;
