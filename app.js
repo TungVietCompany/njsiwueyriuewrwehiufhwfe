@@ -7,6 +7,7 @@ var threadController = require('./ServerController/ThreadController');
 var firebaseController = require('./ServerController/FirebaseController');
 var topicController = require('./ServerController/TopicController');
 var transHisController = require('./ServerController/TransacHistoryController');
+var notifiController = require('./ServerController/NotificationController');
 var connection = require('./DatabaseConnection/MysqlConnection');
 
 var MD5 = require('./Library/MD5');
@@ -27,6 +28,20 @@ var multer = require('multer');
 app.post('/booxtown/rest/user/send_notification', function (req, res) {
     firebaseController.sendMultiUser(req.body,res);
 });
+
+app.post('/booxtown/rest/notification/notification_addstatus', function(req, res){
+    notifiController.Notification_AddStatus(req.body, res);
+});
+
+app.post('/booxtown/rest/notification/notification_removestatus', function(req, res){
+    notifiController.Notification_RemoveStatus(req.body, res);
+});
+app.get('/booxtown/rest/notification/notification_gettop', function(req, res){
+    notifiController.Notification_GetTop(req.query, res);
+});
+// app.post('/booxtown/rest/notification/notification_insert', function(req, res){
+//     notifiController.Notification_Insert(req.body, res);
+// });
 //User Service
 
 

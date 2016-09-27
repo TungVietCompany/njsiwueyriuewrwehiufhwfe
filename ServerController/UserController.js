@@ -38,7 +38,7 @@ function getUserID(topic, res){
     sessionDao.getUserIdBySessionId(topic.session_id,connection,function (response) {
         if (response != 701) {
             var user_id = response;
-            res.json({code: 200, user_id: user_id});
+            res.json(new ResponseData(200, "Thành công", user_id));
         }
         else
         {

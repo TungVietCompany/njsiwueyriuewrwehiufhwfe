@@ -3,6 +3,7 @@ var connection = require('../DatabaseConnection/MysqlConnection');
 var ResponseData = require('../DAO/ResponseData');
 var userDao = require('../DAO/UserDAO');
 var serverKey = 'AIzaSyC0AvWA0n_jQjy_zIhiUXKy8CB0p_QCEsA';
+var notifiController = require('../ServerController/NotificationController');
 var fcm = new FCM(serverKey);
 function sendMessageToUser(deviceId, message) {
     var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
@@ -29,10 +30,18 @@ function sendMessageToUser(deviceId, message) {
     });
 }
 function sendMultiUser(result,res) {
+    var taget_id='_';
+    var content;
+    var title;
+    var key_screen;
     for (var i=0; i<result['notification_list'].length; i++){
         var bit = result['notification_list'][i];
-        var s =bit.user_id;
-
+        taget_id=taget_id+bit.user_id+'_';
+        if(i==0){
+            content=bit.messages;
+            title= bit.title_notifi;
+            key_screen= bit.key_screen;
+        }
         userDao.getTokenForUser(bit.user_id, connection, function (response) {
             if (response != 701) {
                 sendMessageToUser(response.session_id, bit.messages);
@@ -41,9 +50,8 @@ function sendMultiUser(result,res) {
                 res.json(new ResponseData(701, "Session ID không tồn tại", ""));
             }
         });
-
-
     };
+    notifiController.Notification_Insert(taget_id,content,title,key_screen,res);
     res.json(new ResponseData(200, "Success!", ""));
 }
 
