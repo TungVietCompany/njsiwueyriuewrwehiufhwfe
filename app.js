@@ -28,7 +28,16 @@ var multer = require('multer');
 app.post('/booxtown/rest/user/send_notification', function (req, res) {
     firebaseController.sendMultiUser(req.body,res);
 });
-//User Service
+app.post('/booxtown/rest/notification/notification_addstatus', function(req, res){
+    notifiController.Notification_AddStatus(req.body, res);
+});
+
+app.post('/booxtown/rest/notification/notification_removestatus', function(req, res){
+    notifiController.Notification_RemoveStatus(req.body, res);
+});
+app.get('/booxtown/rest/notification/notification_gettop', function(req, res){
+    notifiController.Notification_GetTop(req.query, res);
+});//User Service
 
 
 app.post('/booxtown/rest/user/signup_ios', function (req, res) {
