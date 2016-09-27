@@ -5,7 +5,9 @@ function getUserIdBySessionId(session_id,connection,callback) {
             if (err) {
                 callback('_701_');
             }
+            //console(rows[0].data);
             var user_id = rows[0].data;
+            //var user_id = 21;
             if(user_id != null)
             {
                 callback(user_id);

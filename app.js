@@ -370,6 +370,8 @@ app.get('/booxtown/transactionhistory/tranhis_getbyuser', function(req, res){
     transHisController.TransacHistory_GetByUser(req.query.buyuserid, req.query.selluserid, res);
 });
 
+
+
 app.get('/booxtown/transactionhistory/tranhis_getbybook', function(req, res){
     transHisController.TransacHistory_GetByBook(req.query.buybookid, req.query.sellbookid, res);
 });
@@ -396,6 +398,9 @@ app.delete('/booxtown/user/user_delete', function(req, res){
 
 app.get('/booxtown/user/user_filter', function(req, res){
     userController.User_Filter(req.query, res);
+});
+app.get('/booxtown/user/get_userID', function(req, res){
+    userController.getUserID(req.query, res);
 });
 
 app.get('/booxtown/user/user_getall', function(req, res){

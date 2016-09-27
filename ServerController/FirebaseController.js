@@ -22,7 +22,7 @@ function sendMessageToUser(deviceId, message) {
 
     fcm.send(message, function (err, response) {
         if (err) {
-            //console.log("Something has gone wrong!");
+           // console.log("Something has gone wrong!");
         } else {
             //console.log("Successfully sent with response: ", response);
         }
@@ -35,7 +35,6 @@ function sendMultiUser(result,res) {
 
         userDao.getTokenForUser(bit.user_id, connection, function (response) {
             if (response != 701) {
-                var ss= response.session_id;
                 sendMessageToUser(response.session_id, bit.messages);
             }
             else {
@@ -47,6 +46,9 @@ function sendMultiUser(result,res) {
     };
     res.json(new ResponseData(200, "Success!", ""));
 }
+
+//sendMessageToUser("c8OK4uumK1o:APA91bEq4RFzytWa-NvDS3K_dtmhvod-MWueMnGILjkGs_wv6E8B8NRL_UpyY2bMIwheFheiNfrR5wqEe6ERezCxziXZd_ZSdV6O_d0-exQ7s4zstcelfh_nnnLpUg3SlzHPiF-_vuo7","Minh em cố lên =))");
+
 module.exports.sendMultiUser = sendMultiUser;
 module.exports.sendMessageToUser = sendMessageToUser;
 
