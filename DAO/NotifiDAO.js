@@ -3,7 +3,7 @@
  */
 var md5 = require('../Library/MD5');
 var sessionDao = require('./SessionDAO');
-function Notification_Insert(target_id, content,title, key_screen, connection, callback) {
+function Notification_Insert(key_screen,target_id, content,title, connection, callback) {
             var query = "call Notification_Insert('"+key_screen+"','"+title+"','" + target_id + "', '" + content + "',"
                 + "now())";
             connection.query(query, function (err, rows) {
