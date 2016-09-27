@@ -7,7 +7,7 @@ var threadController = require('./ServerController/ThreadController');
 var firebaseController = require('./ServerController/FirebaseController');
 var topicController = require('./ServerController/TopicController');
 var transHisController = require('./ServerController/TransacHistoryController');
-var notifiController = require('./ServerController/NotificationController');
+var settingController = require('./ServerController/SettingController');
 var connection = require('./DatabaseConnection/MysqlConnection');
 
 var MD5 = require('./Library/MD5');
@@ -28,20 +28,6 @@ var multer = require('multer');
 app.post('/booxtown/rest/user/send_notification', function (req, res) {
     firebaseController.sendMultiUser(req.body,res);
 });
-
-app.post('/booxtown/rest/notification/notification_addstatus', function(req, res){
-    notifiController.Notification_AddStatus(req.body, res);
-});
-
-app.post('/booxtown/rest/notification/notification_removestatus', function(req, res){
-    notifiController.Notification_RemoveStatus(req.body, res);
-});
-app.get('/booxtown/rest/notification/notification_gettop', function(req, res){
-    notifiController.Notification_GetTop(req.query, res);
-});
-// app.post('/booxtown/rest/notification/notification_insert', function(req, res){
-//     notifiController.Notification_Insert(req.body, res);
-// });
 //User Service
 
 
@@ -94,6 +80,10 @@ app.post('/booxtown/rest/book/addbook', function (req, res) {
 
 app.post('/booxtown/rest/book/addbook_ios', function (req, res) {
     bookController.addBook_ios(req.query, res);
+});
+
+app.post('/booxtown/rest/book/bookTransfer', function (req, res) {
+    bookController.bookTransfer(req.body, res);
 });
 
 app.post('/booxtown/rest/book/update', function (req, res) {
@@ -391,8 +381,12 @@ app.get('/booxtown/transactionhistory/tranhis_getbyaccepted', function(req, res)
     transHisController.TransacHistory_GetByAccepted(req.query.isaccepted, res);
 });
 
-app.post('/booxtown/transactionhistory/tranhis_insert', function(req, res){
+app.post('/booxtown/rest/transaction/transaction_insert', function(req, res){
     transHisController.TransacHistory_Insert(req.body, res);
+});
+
+app.post('/booxtown/rest/transaction/transaction_updateStatus', function(req, res){
+    transHisController.TransacHistory_UpdateStatus(req.body, res);
 });
 
 app.post('/booxtown/transactionhistory/tranhis_update', function(req, res){
@@ -463,6 +457,20 @@ app.get('/booxtown/rest/book/book_gettopbyuser', function (req, res) {
     bookController.getTopBookByUser(req.query,res);
 });
 
+//setting
+
+app.get('/booxtown/rest/setting/getSettingByUserId', function (req, res) {
+    settingController.getSettingByUserId(req.query.session_id,res);
+});
+
+app.post('/booxtown/rest/setting/setting_insert', function (req, res) {
+    settingController.getTopBookByUser(req.body,res);
+});
+
+app.post('/booxtown/rest/setting/setting_update', function (req, res) {
+    settingController.Setting_Update(req.body,res);
+});
+
 //Upload Image
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -527,6 +535,7 @@ app.post('/booxtown/rest/deleteimage', function (req, res) {
         res.json({code:701,description:'Failed'});
     }
 });
+
 
 process.on('uncaughtException', function (err) {
     console.log(err);
