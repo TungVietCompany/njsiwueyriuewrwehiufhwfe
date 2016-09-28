@@ -45,6 +45,9 @@ app.get('/booxtown/rest/notification/notification_gettop', function(req, res){
     notifiController.Notification_GetTop(req.query, res);
 });//User Service
 
+app.post('/booxtown/rest/user/checkExpire', function (req, res) {
+    userController.User_CheckUserExpire(req.body.session_id, res);
+});
 
 app.post('/booxtown/rest/user/signup_ios', function (req, res) {
     userController.signup(req.query, res);

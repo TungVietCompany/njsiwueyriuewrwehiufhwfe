@@ -272,6 +272,16 @@ function User_UpdateByUserSession(user, res){
     });
 }
 
+function User_CheckUserExpire(session_id, res){
+    userDao.User_CheckUserExpire(session_id, connection, function(response) {
+        if (response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            res.json(new ResponseData(200, "Success!", ""));
+    });
+}
+
+module.exports.User_CheckUserExpire = User_CheckUserExpire;
 module.exports.login_firebase = login_firebase;
 module.exports.userLogout = userLogout;
 module.exports.changePassword = changePassword;

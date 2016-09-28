@@ -147,7 +147,7 @@ function Topic_GetByUserID(userID, connection, callback){
 
 function Topic_GetByUserSession(session_id, connection, callback){
     sessionDao.getUserIdBySessionId(session_id, connection, function(response){
-        if(response != 701){
+        if(response != '_701_'){
             connection.query("call Topic_GetByUser('" + response + "')", function(err, rows){
                 if(err){
                     callback(701);

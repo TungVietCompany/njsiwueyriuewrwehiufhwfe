@@ -93,7 +93,7 @@ function TransacHistory_GetByAccepted(isAccepted, connection, callback) {
 
 function TransacHistory_UpdateStatus(transHis, connection, callback) {
     sessionDao.getUserIdBySessionId(transHis.session_id, connection, function (response) {
-        if (response != 701) {
+        if (response != '_701_') {
             var query = "call sp_updateTransactionStatus(" + transHis.trans_id + ", "
                 + transHis.status_id + ")";
             connection.query(query, function (err, rows) {

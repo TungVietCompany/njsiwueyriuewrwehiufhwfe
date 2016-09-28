@@ -125,7 +125,7 @@ function getTokenForUser(user_id,connection,callback) {
 
 function updateUserInfo(session_id,user,connection,callback) {
     sessionDao.getUserIdBySessionId(session_id,connection,function (response) {
-        if(response != 701)
+        if(response != '_701_')
         {
             connection.query("call sp_updateUser('" + response + "','" + user.first_name + "','" + user.last_name + "','"
                + user.email + "','" + user.birthday + "','" + user.phone + "')"
@@ -144,7 +144,6 @@ function updateUserInfo(session_id,user,connection,callback) {
 }
 
 function checkValidUsernameAndOldPassword(session_id,pwd_old,connection,callback) {
-    console.log(session_id + "  "+pwd_old);
     connection.query("CALL sp_checkValidUsernameAndOldPassword('" + session_id +"','"+pwd_old+"')"
         , function (err, rows) {
             if (err) {
@@ -284,7 +283,7 @@ function User_GetByUserName(userName, connection, callback){
 
 function User_GetByUserSession(session_id, connection, callback){
     sessionDao.getUserIdBySessionId(session_id, connection, function(response){
-        if(response != 701){
+        if(response != '_701_'){
             connection.query("call User_GetById('" + response + "')", function(err, rows){
                 if(err){
                     callback(701);
@@ -331,7 +330,7 @@ function User_Update(user, connection, callback){
 
 function User_UpdateByUserSession(user, connection, callback){
     sessionDao.getUserIdBySessionId(user.session_id, connection, function(response){
-        if(response != 701){
+        if(response != '_701_'){
             connection.query("call User_Update('" + response + "', '" + user.firstName + "', '" + user.lastName + "', '"
                 + user.userName + "', '" + user.mail + "', '" + user.birthDay + "', '" + user.phone + "', '" + user.password
                 + "', " + user.isDeleted + ", " + user.isActive + ", '" + user.createDate + "')", function(err, rows){
@@ -348,6 +347,31 @@ function User_UpdateByUserSession(user, connection, callback){
     });
 }
 
+function User_CheckUserExpire(session_id, connection, callback){
+    sessionDao.getUserIdBySessionId(session_id, connection, function(response){
+        if(response != '_701_'){
+            connection.query("call sp_checkExpire(" + response + ")", function(err, rows){
+                if(err){
+                    callback(701);
+                }
+                else{
+                    if(rows[0][0].date > 14)
+                    {
+                        callback(701);
+                    }
+                    else
+                    {
+                        callback(200);
+                    }
+                }
+            });
+        }
+        else
+            callback(701);
+    });
+}
+
+module.exports.User_CheckUserExpire = User_CheckUserExpire;
 module.exports.userLogin_firebase = userLogin_firebase;
 module.exports.userLogout = userLogout;
 module.exports.changePassword = changePassword;
