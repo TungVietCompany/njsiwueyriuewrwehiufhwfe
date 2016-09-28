@@ -92,6 +92,10 @@ app.post('/booxtown/rest/user/forgotpassword', function (req, res) {
 
 //Book Service
 
+app.get('/booxtown/rest/book/getAllGenre', function (req, res) {
+    bookController.Book_GetAllGenre(res);
+});
+
 app.post('/booxtown/rest/book/addbook', function (req, res) {
     bookController.addBook(req.body, res);
 });

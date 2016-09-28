@@ -227,7 +227,17 @@ function Book_GetAll(connection, callback){
             callback(701);
         }
         else{
-            console.log(rows[0]);
+            callback(rows[0]);
+        }
+    });
+}
+
+function Book_GetAllGenre(connection, callback){
+    connection.query("call sp_getAllGenre()", function(err, rows){
+        if(err){
+            callback(701);
+        }
+        else{
             callback(rows[0]);
         }
     });
@@ -377,6 +387,7 @@ function Book_Update(book, connection, callback){
 }
 
 
+module.exports.Book_GetAllGenre = Book_GetAllGenre;
 module.exports.bookTransfer = bookTransfer;
 module.exports.getTopBookByUser = getTopBookByUser;
 module.exports.getTopBook = getTopBook;

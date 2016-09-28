@@ -154,6 +154,21 @@ function Book_Filter(book, res){
     });
 }
 
+function Book_GetAllGenre(res){
+    bookDao.Book_GetAllGenre(connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            var listGenre = [];
+            var i = 0;
+            for(i = 0;i<response.length;i++)
+            {
+                listGenre.push(response[i]);
+            }
+            res.json({code: 200, genre: listGenre});
+    });
+}
+
 function Book_GetAll(res){
     bookDao.Book_GetAll(connection, function(response){
         if(response == 701)
@@ -262,6 +277,7 @@ function Book_Update(book, res){
     });
 }
 
+module.exports.Book_GetAllGenre = Book_GetAllGenre;
 module.exports.bookTransfer = bookTransfer;
 module.exports.getTopBookByUser = getTopBookByUser;
 module.exports.getAllBook = getAllBook;
