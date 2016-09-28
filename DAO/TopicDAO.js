@@ -15,6 +15,16 @@ function Topic_Delete(topicid, connection, callback){
         }
     });
 }
+function getTopicInfoById(topic,connection,callback) {
+    var query = "call sp_getTopicById('" + topic + "')";
+    connection.query(query
+        , function (err, rows) {
+            if (err) {
+                callback(701);
+            }
+            callback(rows[0][0]);
+        });
+}
 
 function Topic_Filter(topic, connection, callback){
     var query = "call Topic_Filter('" + (topic.topicid ? topic.topicid : 'null') + "', '" + (topic.title ? topic.title : 'null')
@@ -192,7 +202,7 @@ function Topic_Update(topic, connection, callback){
         }
     });
 }
-
+module.exports.getTopicInfoById =getTopicInfoById;
 module.exports.Topic_AddStatus = Topic_AddStatus;
 module.exports.Topic_RemoveStatus = Topic_RemoveStatus;
 module.exports.Topic_GetTop = Topic_GetTop;

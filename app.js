@@ -270,6 +270,11 @@ app.get('/booxtown/rest/thread/thread_gettop', function(req, res){
     threadController.Thread_GetTop(req.query, res);
 });
 
+
+app.get('/booxtown/rest/thread/get_threadbyid', function(req, res){
+    threadController.GetThreadByID(req.query, res);
+});
+
 app.get('/booxtown/thread/thread_getall', function(req, res){
     threadController.Thread_GetAll(res);
 });
@@ -316,6 +321,9 @@ app.get('/booxtown/rest/topic/topic_filter', function(req, res){
 
 app.get('/booxtown/rest/topic/topic_getall', function(req, res){
     topicController.Topic_GetAll(res);
+});
+app.get('/booxtown/rest/topic/get_topicbyid', function(req, res){
+    topicController.GetTopicByID(req.query, res);
 });
 
 app.get('/booxtown/rest/topic/topic_gettop', function(req, res){

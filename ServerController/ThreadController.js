@@ -25,6 +25,19 @@ function Thread_Filter(thread, res){
     });
 }
 
+function GetThreadByID(thread, res){
+    threadDao.getThreadInfoById(thread.id, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+        {
+            //console.log(response);
+            res.json({code: 200, thread: response});
+        }
+
+    });
+}
+
 function Thread_GetTop(thread, res){
     threadDao.Thread_GetTop(thread, connection, function(response){
         if(response == 701)
@@ -124,7 +137,7 @@ function Thread_Update(thread, res){
             res.json(response);
     });
 }
-
+module.exports.GetThreadByID=GetThreadByID;
 module.exports.Thread_AddStatus = Thread_AddStatus;
 module.exports.Thread_RemoveStatus = Thread_RemoveStatus;
 module.exports.Thread_GetTop = Thread_GetTop;

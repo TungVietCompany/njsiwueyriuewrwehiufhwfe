@@ -71,6 +71,8 @@ function getBookInfoById(book,connection,callback) {
     });
 }
 
+
+
 function getTopBookByUser(book,connection,callback) {
     sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
         if(response != '_701_')

@@ -29,7 +29,16 @@ function Thread_Filter(thread, connection, callback){
         }
     });
 }
-
+function getThreadInfoById(thread,connection,callback) {
+            var query = "call sp_getThreadById('" + thread + "')";
+            connection.query(query
+                , function (err, rows) {
+                    if (err) {
+                        callback(701);
+                    }
+                    callback(rows[0][0]);
+                });
+}
 function Thread_GetTop(thread, connection, callback){
     sessionDao.getUserIdBySessionId(thread.session_id,connection,function (response) {
         if (response != '_701_') {
@@ -184,7 +193,7 @@ function Thread_Update(thread, connection, callback){
         }
     });
 }
-
+module.exports.getThreadInfoById =getThreadInfoById;
 module.exports.Thread_AddStatus = Thread_AddStatus;
 module.exports.Thread_RemoveStatus = Thread_RemoveStatus;
 module.exports.Thread_GetTop = Thread_GetTop;

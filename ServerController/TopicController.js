@@ -61,7 +61,18 @@ function Topic_AddStatus(topic, res){
             res.json(new ResponseData(200, "Success", ""));
     });
 }
+function GetTopicByID(topic, res){
+    topicDao.getTopicInfoById(topic.id, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+        {
+            //console.log(response);
+            res.json({code: 200, thread: response});
+        }
 
+    });
+}
 function Topic_RemoveStatus(topic, res){
     topicDao.Topic_RemoveStatus(topic, connection, function(response){
         if(response == 701)
@@ -133,7 +144,7 @@ function Topic_Update(topic, userid, res) {
             res.json(response);
     });
 }
-
+module.exports.GetTopicByID =GetTopicByID;
 module.exports.Topic_AddStatus = Topic_AddStatus;
 module.exports.Topic_RemoveStatus = Topic_RemoveStatus;
 module.exports.Topic_GetTop = Topic_GetTop;
