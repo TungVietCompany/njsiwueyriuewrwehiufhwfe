@@ -81,10 +81,10 @@ function TransacHistory_GetByAccepted(isAccepted, res){
 
 function TransacHistory_Insert(tranHis, res){
     transHisDao.TransacHistory_Insert(tranHis, connection, function(response){
-        if(response == 701)
+        if(response == '_701_')
             res.json(new ResponseData(701, "Error!", ""));
         else
-            res.json(new ResponseData(200, "Success!", ""));
+            res.json({code:200,description:'Success',transaction_id : response});
     });
 }
 

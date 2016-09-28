@@ -111,41 +111,63 @@ function TransacHistory_UpdateStatus(transHis, connection, callback) {
 
 function TransacHistory_Insert(transHis, connection, callback) {
     sessionDao.getUserIdBySessionId(transHis.session_id, connection, function (response) {
-        if (response != 701) {
+
+        if (response != '_701_') {
             var query = "call TransacHistory_Insert(" + transHis.buyUserID + ", "
-                + transHis.sellUserID + ", now(), " + transHis.buyBookID + ", "
+                + transHis.sellUserID + ", now(), '" + transHis.buyBookID + "', "
                 + transHis.sellBookID + ", '" + transHis.action + "');";
             connection.query(query, function (err, rows) {
                 if (err) {
+                    console.log(err);
                     callback('_701_');
                 }
                 else {
-                    if(transHis.action == "swap")
-                    {
-                        var listSwap = transHis.action.split("_+_");
-                        var i = 0;
-                        query = "";
-                        for(i = 0;i<listSwap.length;i++)
+                        if(transHis.action == "swap")
                         {
-                            query += "call sp_insertBookswap(" + rows[0][0].id +","+listSwap[i] + ");";
+                            TransacHistory_InsertBookSwap(rows[0][0].id, transHis.buyBookID,connection, function (response) {
+                                if(response != '_701_')
+                                {
+                                    callback(rows[0][0].id);
+                                }
+                                else
+                                {
+                                    callback('_701_');
+                                }
+                            });
+
                         }
-                        connection.query(query, function (err, rows) {
-                            if (err) {
-                                callback('_701_');
-                            }
-                            else
-                            {
-                                callback(rows[0][0].id);
-                            }
-                        });
-                    }
-                    else {
-                        callback(rows[0][0].id);
-                    }
+                        else
+                        {
+                            callback(rows[0][0].id);
+                        }
+
                 }
             });
         } else
-            callback(701);
+            callback('_701_');
+    });
+}
+
+function TransacHistory_InsertBookSwap(id,buyBookID,connection,callback) {
+    var listSwap = buyBookID.split("_+_");
+    var i = 0;
+    var query = "INSERT INTO book_swap (transaction_id,book_id) VALUES ";
+    for(i = 0;i<listSwap.length;i++)
+    {
+        query += "(" + id + ","+listSwap[i] + ")";
+        if(i < listSwap.length - 1)
+        {
+            query += ",";
+        }
+    }
+    connection.query(query, function (err, rows) {
+        if (err) {
+            callback('_701_');
+        }
+        else
+        {
+            callback(id);
+        }
     });
 }
 
