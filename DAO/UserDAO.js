@@ -109,7 +109,6 @@ function getTokenForUser(user_id,connection,callback) {
     connection.query("CALL getTokenForUser(" + user_id +")"
         , function (err, rows) {
             if (err) {
-
                 callback(701);
             }
 

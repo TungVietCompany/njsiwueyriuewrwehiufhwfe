@@ -1,1 +1,3 @@
-console.log('cmqnLj7lV2Q:APA91bGVsH-B1d5qkYFWdfjEG68ngHAN0GkUbAP-gOqj9YwBlm5BnYBIUOha_iwiggkae5mJ8eNp2_pfNFbnH1TazZ89gETCI9ZJwIVfyfpTZlb-GOl15ajIXXADoiOrIwlZ1_8EWX7y'.length);
+var str = "hihi_+_hehehe_+_tenten_+_";
+var str1 = str.split("_+_");
+console.log(str1[2]);

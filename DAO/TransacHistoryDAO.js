@@ -114,13 +114,34 @@ function TransacHistory_Insert(transHis, connection, callback) {
         if (response != 701) {
             var query = "call TransacHistory_Insert(" + transHis.buyUserID + ", "
                 + transHis.sellUserID + ", now(), " + transHis.buyBookID + ", "
-                + transHis.sellBookID + ", '" + transHis.action + "')";
+                + transHis.sellBookID + ", '" + transHis.action + "');";
             connection.query(query, function (err, rows) {
                 if (err) {
-                    callback(701);
+                    callback('_701_');
                 }
                 else {
-                    callback(200);
+                    if(transHis.action == "swap")
+                    {
+                        var listSwap = transHis.action.split("_+_");
+                        var i = 0;
+                        query = "";
+                        for(i = 0;i<listSwap.length;i++)
+                        {
+                            query += "call sp_insertBookswap(" + rows[0][0].id +","+listSwap[i] + ");";
+                        }
+                        connection.query(query, function (err, rows) {
+                            if (err) {
+                                callback('_701_');
+                            }
+                            else
+                            {
+                                callback(rows[0][0].id);
+                            }
+                        });
+                    }
+                    else {
+                        callback(rows[0][0].id);
+                    }
                 }
             });
         } else

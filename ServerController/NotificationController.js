@@ -7,8 +7,8 @@ var sessionDao = require('../DAO/SessionDAO');
 var md5 = require('../Library/MD5');
 var ResponseData = require('../DAO/ResponseData');
 
-function Notification_Insert(target_id, content,title,key_screen, res){
-    notifiDAO.Notification_Insert(key_screen,target_id,content,title, connection, function(response){
+function Notification_Insert(target_id, content,title,key_screen,id_screen,s_id, res){
+    notifiDAO.Notification_Insert(s_id,id_screen,key_screen,target_id,content,title, connection, function(response){
         if(response == 701){
             // res.json(new ResponseData(701, "Failed", ""));
         }

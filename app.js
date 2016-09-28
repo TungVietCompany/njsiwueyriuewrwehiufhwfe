@@ -8,6 +8,7 @@ var firebaseController = require('./ServerController/FirebaseController');
 var topicController = require('./ServerController/TopicController');
 var transHisController = require('./ServerController/TransacHistoryController');
 var settingController = require('./ServerController/SettingController');
+var notifiController = require('./ServerController/NotificationController');
 var connection = require('./DatabaseConnection/MysqlConnection');
 
 var MD5 = require('./Library/MD5');
@@ -26,7 +27,8 @@ var multer = require('multer');
 
 // Notification
 app.post('/booxtown/rest/user/send_notification', function (req, res) {
-    firebaseController.sendMultiUser(req.body,res);
+    //firebaseController.sendMultiUser(req.body,res);
+    firebaseController.sendMultiUserKey(req.body,res);
 });
 app.post('/booxtown/rest/notification/notification_addstatus', function(req, res){
     notifiController.Notification_AddStatus(req.body, res);
