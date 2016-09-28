@@ -222,11 +222,12 @@ function Book_Filter(book, connection, callback){
 }
 
 function Book_GetAll(connection, callback){
-    connection.query("call Book_GetAll()", function(err, rows){
+    connection.query("call getAll()", function(err, rows){
         if(err){
             callback(701);
         }
         else{
+            console.log(rows[1]);
             callback(rows[0]);
         }
     });

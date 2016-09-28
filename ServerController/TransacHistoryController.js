@@ -84,7 +84,7 @@ function TransacHistory_Insert(tranHis, res){
         if(response == '_701_')
             res.json(new ResponseData(701, "Error!", ""));
         else
-            res.json({code:200,description:'Success',transaction_id : response});
+            res.json(new ResponseData(200, "Success", response));
     });
 }
 
