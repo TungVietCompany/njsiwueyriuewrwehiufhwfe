@@ -30,6 +30,10 @@ app.post('/booxtown/rest/user/send_notification', function (req, res) {
     //firebaseController.sendMultiUser(req.body,res);
     firebaseController.sendMultiUserKey(req.body,res);
 });
+app.post('/booxtown/rest/user/send_notification_ios', function (req, res) {
+    //firebaseController.sendMultiUser(req.body,res);
+    firebaseController.sendMultiUserKeyIOS(req.body,res);
+});
 app.post('/booxtown/rest/notification/notification_addstatus', function(req, res){
     notifiController.Notification_AddStatus(req.body, res);
 });

@@ -127,11 +127,47 @@ function sendMultiUserKey(result, res) {
     });
     res.json(new ResponseData(200, "Success!", ""));
 }
+function sendMultiUserKeyIOS(result, res) {
+    var taget_id = '_';
+    var content;
+    var title;
+    var key_screen;
+    var id_screen;
+    taget_id = '_' + result.user_id + '_';
+    content = result.messages;
+    title = result.title_notifi;
+    key_screen = result.key_screen;
+    id_screen = result.id_screen;
 
+    var s_id = MD5.getMD5ByTime("");
+
+    notifiController.Notification_Insert(taget_id, content, title, key_screen, id_screen, s_id, res);
+    var notifi_id;
+    notifiDAO.getNotifiID(s_id, connection, function (response) {
+        if (response != 701) {
+            notifi_id = response.id;
+            userDao.getTokenForUser(result.user_id, connection, function (response) {
+                if (response != 701) {
+                    sendMessageToUserKey(response.session_id, result.messages, result.key_screen, result.id_screen, result.title_notifi, notifi_id);
+                }
+                else {
+                    res.json(new ResponseData(701, "Session ID không tồn tại", ""));
+                }
+            });
+
+            ;
+        }
+        else {
+            //res.json(new ResponseData(701, "Session ID không tồn tại", ""));
+        }
+    });
+    res.json(new ResponseData(200, "Success!", ""));
+}
 //sendMessageToUser("c8OK4uumK1o:APA91bEq4RFzytWa-NvDS3K_dtmhvod-MWueMnGILjkGs_wv6E8B8NRL_UpyY2bMIwheFheiNfrR5wqEe6ERezCxziXZd_ZSdV6O_d0-exQ7s4zstcelfh_nnnLpUg3SlzHPiF-_vuo7","Minh em cố lên =))");
-module.exports.sendMultiUserKey = sendMultiUserKey
+module.exports.sendMultiUserKey = sendMultiUserKey;
 module.exports.sendMultiUser = sendMultiUser;
 module.exports.sendMessageToUser = sendMessageToUser;
+module.exports.sendMultiUserKeyIOS = sendMultiUserKeyIOS;
 
 
 

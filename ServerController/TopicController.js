@@ -68,7 +68,9 @@ function GetTopicByID(topic, res){
         else
         {
             //console.log(response);
-            res.json({code: 200, thread: response});
+            var listTopic = [];
+            listTopic.push(response);
+            res.json({code: 200, topic: listTopic});
         }
 
     });

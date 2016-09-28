@@ -31,8 +31,9 @@ function GetThreadByID(thread, res){
             res.json(new ResponseData(701, "Error!", ""));
         else
         {
-            //console.log(response);
-            res.json({code: 200, thread: response});
+            var listThread = [];
+            listThread.push(response);
+            res.json({code: 200, thread: listThread});
         }
 
     });
