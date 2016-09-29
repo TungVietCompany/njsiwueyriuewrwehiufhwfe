@@ -90,13 +90,13 @@ function sendMultiUserKey(result, res) {
     var title;
     var key_screen;
     var id_screen;
-
+    console.log(result);
     for (var i = 0; i < result['notification_list'].length; i++) {
         var bit = result['notification_list'][i];
         taget_id = taget_id + bit.user_id + '_';
         if (i == 0) {
             content = bit.messages;
-            title = bit.title_notifi;
+            title = bit.title_notification;
             key_screen = bit.key_screen;
             id_screen = bit.id_screen;
         }
