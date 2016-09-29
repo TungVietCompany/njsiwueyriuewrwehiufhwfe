@@ -198,6 +198,17 @@ function userLogout(user,connection,callback) {
     });
 }
 
+function user_getRating(user_id,connection,callback) {
+    connection.query("select IFNULL(func_getRatingByUserId(" + user_id + "),0) as rating"
+        , function (err, rows) {
+            if (err) {
+                callback(701);
+            }
+            console.log(rows[0]);
+            callback(rows[0].rating);
+        });
+}
+
 //DungNS 11-9-2016
 
 function User_Delete(userid, connection, callback){
@@ -371,6 +382,7 @@ function User_CheckUserExpire(session_id, connection, callback){
     });
 }
 
+module.exports.user_getRating = user_getRating;
 module.exports.User_CheckUserExpire = User_CheckUserExpire;
 module.exports.userLogin_firebase = userLogin_firebase;
 module.exports.userLogout = userLogout;

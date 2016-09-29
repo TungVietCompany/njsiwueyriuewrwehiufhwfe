@@ -110,6 +110,19 @@ function TransacHistory_UpdateStatus(transHis, connection, callback) {
     });
 }
 
+function TransacHistory_UpdateRating(transHis, connection, callback) {
+    var query = "call sp_updateRating(" + transHis.trans_id + ", "
+        + transHis.user_promp + ","+ transHis.user_cour + ","+ transHis.user_quality + ")";
+    connection.query(query, function (err, rows) {
+        if (err) {
+            callback(701);
+        }
+        else {
+            callback(200);
+        }
+    });
+}
+
 function TransacHistory_Insert(transHis, connection, callback) {
     sessionDao.getUserIdBySessionId(transHis.session_id, connection, function (response) {
 
@@ -186,7 +199,47 @@ function TransacHistory_Update(tranHis, connection, callback) {
     });
 }
 
+function Transaction_getTopTransaction(transHis, connection, callback) {
+    sessionDao.getUserIdBySessionId(transHis.session_id, connection, function (response) {
+        if (response != '_701_') {
+            var query = "call sp_getTopTranaction(" + response + ", "
+                + transHis.top + "," + transHis.from + ")";
+            connection.query(query, function (err, rows) {
+                if (err) {
+                    callback(701);
+                }
+                else {
+                    callback(rows[0]);
+                }
+            });
+        } else
+            callback(701);
+    });
+}
 
+function Transaction_getTransactionInfoById(transaction_id, connection, callback) {
+    var query = "call sp_getTranactionById(" + transaction_id + ")";
+    connection.query(query
+        , function (err, rows) {
+            if (err) {
+                callback(701);
+            }
+            if(rows[0][0].action == 'swap')
+            {
+                rows[0][0].book = [];
+                var i = 0;
+                for( i = 0;i<rows[1].length;i++)
+                {
+                    rows[0][0].book.push(rows[1][i]);
+                }
+            }
+            callback({code: 200, transaction:rows[0][0]});
+        });
+}
+
+module.exports.TransacHistory_UpdateRating = TransacHistory_UpdateRating;
+module.exports.Transaction_getTopTransaction = Transaction_getTopTransaction;
+module.exports.Transaction_getTransactionInfoById = Transaction_getTransactionInfoById;
 module.exports.TransacHistory_UpdateStatus = TransacHistory_UpdateStatus;
 module.exports.TransacHistory_Delete = TransacHistory_Delete;
 module.exports.TransacHistory_Filter = TransacHistory_Filter;

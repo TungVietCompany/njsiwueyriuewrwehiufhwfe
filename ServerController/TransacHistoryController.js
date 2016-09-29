@@ -53,6 +53,15 @@ function TransacHistory_GetByDate(fromDate, toDate, res){
     });
 }
 
+function TransacHistory_UpdateRating(trans, res){
+    transHisDao.TransacHistory_UpdateRating(trans, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            res.json(new ResponseData(200, "Success!", ""));
+    });
+}
+
 function TransacHistory_GetByUser(buyUserID, sellUserID, res){
     transHisDao.TransacHistory_GetByUser(buyUserID, sellUserID, connection, function(response){
         if(response == 701)
@@ -61,6 +70,31 @@ function TransacHistory_GetByUser(buyUserID, sellUserID, res){
             res.json(response);
     });
 }
+
+function Transaction_getTopTransaction(transaction_id, res){
+    transHisDao.Transaction_getTopTransaction(transaction_id,connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            var listTransaction = [];
+            var i = 0;
+            for(i = 0;i<response.length;i++)
+            {
+                listTransaction.push(response[i]);
+            }
+            res.json({code: 200, transaction: listTransaction});
+    });
+}
+
+function Transaction_getTransactionInfoById(transaction_id, res){
+    transHisDao.Transaction_getTransactionInfoById(transaction_id,connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            res.json(response);
+    });
+}
+
 
 function TransacHistory_GetByBook(buyBookID, sellBookID, res){
     transHisDao.TransacHistory_GetByBook(buyBookID, sellBookID, connection, function(response){
@@ -111,6 +145,11 @@ function TransacHistory_Update(tranHis, res){
 function TransacHistory_GetBookByIdTransaction(transHisID, res){
    bookController.getBookInTransaction(transHisID,res);
 }
+
+
+module.exports.TransacHistory_UpdateRating =TransacHistory_UpdateRating;
+module.exports.Transaction_getTopTransaction =Transaction_getTopTransaction;
+module.exports.Transaction_getTransactionInfoById =Transaction_getTransactionInfoById;
 module.exports.TransacHistory_GetBookByIdTransaction =TransacHistory_GetBookByIdTransaction;
 module.exports.TransacHistory_UpdateStatus = TransacHistory_UpdateStatus;
 module.exports.TransacHistory_Delete = TransacHistory_Delete;

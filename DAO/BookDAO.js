@@ -66,6 +66,7 @@ function getBookInfoById(book, connection, callback) {
     });
 }
 
+
 function getBookInfoByIds(trans_id, connection, callback) {
     var query = "call sp_getBookByIds('" + trans_id + "')";
     connection.query(query
