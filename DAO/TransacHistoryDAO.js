@@ -51,6 +51,7 @@ function TransacHistory_GetById(transHisID, connection, callback) {
     });
 }
 
+
 function TransacHistory_GetByDate(fromDate, toDate, connection, callback) {
     connection.query("call TransacHistory_GetByDate('" + (fromDate ? fromDate : 'null') + "', '"
         + (toDate ? toDate : 'null') + "')", function (err, rows) {

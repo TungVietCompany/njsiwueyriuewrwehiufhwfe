@@ -1,16 +1,15 @@
 var md5 = require('../Library/MD5');
 var sessionDao = require('./SessionDAO');
 
-function addBook(book,connection,callback) {
+function addBook(book, connection, callback) {
     console.log(book);
-    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
-        if(response != '_701_')
-        {
+    sessionDao.getUserIdBySessionId(book.session_id, connection, function (response) {
+        if (response != '_701_') {
             var query = "call sp_insert_book('"
                 + book.title + "','" + book.author + "','"
                 + book.photo + "','" + book.hash_tag + "'," + book.location_longitude + ","
-                + book.location_latitude + ",'"+book.genre+"','"+ book.b_condition +"','"+book.b_action+"'" +
-                ",0,NOW(),"+response+"," + book.price +")";
+                + book.location_latitude + ",'" + book.genre + "','" + book.b_condition + "','" + book.b_action + "'" +
+                ",0,NOW()," + response + "," + book.price + ")";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
@@ -19,22 +18,20 @@ function addBook(book,connection,callback) {
                     callback(200);
                 });
         }
-        else
-        {
+        else {
             callback(701);
         }
     });
 }
 
-function addBook_ios(book,connection,callback) {
-    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
-        if(response != 701)
-        {
+function addBook_ios(book, connection, callback) {
+    sessionDao.getUserIdBySessionId(book.session_id, connection, function (response) {
+        if (response != 701) {
             var query = "call sp_insert_book('" + md5.getMD5ByTime(book.title) + "','"
                 + book.title + "','" + book.author + "','"
                 + book.photo + "','" + book.hash_tag + "'," + book.location_longitude + ","
-                + book.location_latitude + ",'"+book.genre+"','"+ book.b_condition +"','"+book.b_action+"'" +
-                ",0,NOW(),'"+response+"')";
+                + book.location_latitude + ",'" + book.genre + "','" + book.b_condition + "','" + book.b_action + "'" +
+                ",0,NOW(),'" + response + "')";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
@@ -44,40 +41,48 @@ function addBook_ios(book,connection,callback) {
                     callback(200);
                 });
         }
-        else
-        {
+        else {
             callback(701);
         }
     });
 }
 
-function getBookInfoById(book,connection,callback) {
-    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
-        if(response != '_701_')
-        {
-            var query = "call sp_getBookById('" + book.book_id + "','"+ response +"')";
+function getBookInfoById(book, connection, callback) {
+    sessionDao.getUserIdBySessionId(book.session_id, connection, function (response) {
+        if (response != '_701_') {
+            var query = "call sp_getBookById('" + book.book_id + "','" + response + "')";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
                         callback(701);
                     }
+
                     callback(rows[0][0]);
                 });
         }
-        else
-        {
+        else {
             callback(701);
         }
     });
 }
 
+function getBookInfoByIds(trans_id, connection, callback) {
+    var query = "call sp_getBookByIds('" + trans_id + "')";
+    connection.query(query
+        , function (err, rows) {
+            if (err) {
+                callback(701);
+            }
+            callback(rows[0]);
+        });
+
+}
 
 
-function getTopBookByUser(book,connection,callback) {
-    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
-        if(response != '_701_')
-        {
-            var query = "call sp_getTopBookByUser("+ book.top + ","+ book.from + ","+ response +")";
+function getTopBookByUser(book, connection, callback) {
+    sessionDao.getUserIdBySessionId(book.session_id, connection, function (response) {
+        if (response != '_701_') {
+            var query = "call sp_getTopBookByUser(" + book.top + "," + book.from + "," + response + ")";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
@@ -86,18 +91,16 @@ function getTopBookByUser(book,connection,callback) {
                     callback(rows[0]);
                 });
         }
-        else
-        {
+        else {
             callback(701);
         }
     });
 }
 
-function getTopBook(book,connection,callback) {
-    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
-        if(response != '_701_')
-        {
-            var query = "call sp_GetTopBook("+ book.top + ","+ book.from +")";
+function getTopBook(book, connection, callback) {
+    sessionDao.getUserIdBySessionId(book.session_id, connection, function (response) {
+        if (response != '_701_') {
+            var query = "call sp_GetTopBook(" + book.top + "," + book.from + ")";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
@@ -106,19 +109,17 @@ function getTopBook(book,connection,callback) {
                     callback(rows[0]);
                 });
         }
-        else
-        {
+        else {
             callback(701);
         }
     });
 }
 
 
-function getAllBookByUserId(session_id,connection,callback) {
-    sessionDao.getUserIdBySessionId(session_id,connection,function (response) {
-        if(response != '_701_')
-        {
-            var query = "call sp_getAllBookByUser("+ response +")";
+function getAllBookByUserId(session_id, connection, callback) {
+    sessionDao.getUserIdBySessionId(session_id, connection, function (response) {
+        if (response != '_701_') {
+            var query = "call sp_getAllBookByUser(" + response + ")";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
@@ -127,14 +128,13 @@ function getAllBookByUserId(session_id,connection,callback) {
                     callback(rows[0]);
                 });
         }
-        else
-        {
+        else {
             callback(701);
         }
     });
 }
 
-function getAllBook(connection,callback) {
+function getAllBook(connection, callback) {
     var query = "call Book_GetAll()";
     connection.query(query
         , function (err, rows) {
@@ -145,11 +145,10 @@ function getAllBook(connection,callback) {
         });
 }
 
-function bookTransfer(book,connection,callback) {
-    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
-        if(response != '_701_')
-        {
-            var query = "call sp_bookTransfer(" + book.user_id +","
+function bookTransfer(book, connection, callback) {
+    sessionDao.getUserIdBySessionId(book.session_id, connection, function (response) {
+        if (response != '_701_') {
+            var query = "call sp_bookTransfer(" + book.user_id + ","
                 + book.book_id + ")";
             connection.query(query
                 , function (err, rows) {
@@ -159,21 +158,19 @@ function bookTransfer(book,connection,callback) {
                     callback(200);
                 });
         }
-        else
-        {
+        else {
             callback(701);
         }
     });
 }
 
-function updateBook(book,connection,callback) {
-    sessionDao.getUserIdBySessionId(book.session_id,connection,function (response) {
-        if(response != '_701_')
-        {
-            var query = "call sp_updatebook(" + book.id +",'"
+function updateBook(book, connection, callback) {
+    sessionDao.getUserIdBySessionId(book.session_id, connection, function (response) {
+        if (response != '_701_') {
+            var query = "call sp_updatebook(" + book.id + ",'"
                 + book.title + "','" + book.author + "','"
                 + book.photo + "','" + book.hash_tag + "'," + book.location_longitude + ","
-                + book.location_latitude + ",'"+book.genre+"','"+ book.b_condition +"','"+book.b_action+"',"+ book.price +")";
+                + book.location_latitude + ",'" + book.genre + "','" + book.b_condition + "','" + book.b_action + "'," + book.price + ")";
             connection.query(query
                 , function (err, rows) {
                     if (err) {
@@ -182,8 +179,7 @@ function updateBook(book,connection,callback) {
                     callback(200);
                 });
         }
-        else
-        {
+        else {
             callback(701);
         }
     });
@@ -192,18 +188,18 @@ function updateBook(book,connection,callback) {
 module.exports.getAllBook = getAllBook;
 module.exports.updateBook = updateBook;
 module.exports.addBook_ios = addBook_ios;
-function Book_Delete(bookid, connection, callback){
-    connection.query("call Book_Delete(" + bookid + ")", function(err, rows){
-        if(err){
+function Book_Delete(bookid, connection, callback) {
+    connection.query("call Book_Delete(" + bookid + ")", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(200);
         }
     });
 }
 
-function Book_Filter(book, connection, callback){
+function Book_Filter(book, connection, callback) {
     var query = "call Book_Filter('" + (book.bookid ? book.bookid : 'null') + "', '" + (book.title ? book.title : 'null')
         + "', '" + (book.author ? book.author : 'null') + "', '" + (book.photo ? book.photo : 'null') + "', '"
         + (book.hashTag ? book.hashTag : 'null') + "', " + (book.locationLongitude ? book.locationLongitude : 'null') + ", "
@@ -211,126 +207,127 @@ function Book_Filter(book, connection, callback){
         + (book.bookCondition ? book.bookCondition : 'null') + "', '" + (book.action ? book.action : 'null') + "', "
         + (book.isDeleted ? book.isDeleted : 'null' + ", '" + (book.createDate ? book.createDate : 'null') + "', '"
         + (book.userID ? book.userID : 'null') + "', " + (book.price ? book.price : 'null') + ")");
-    connection.query(query, function(err, rows){
-        if(err){
+    connection.query(query, function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_GetAll(connection, callback){
-    connection.query("call Book_GetAll()", function(err, rows){
-        if(err){
+function Book_GetAll(connection, callback) {
+    connection.query("call Book_GetAll()", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_GetAllGenre(connection, callback){
-    connection.query("call sp_getAllGenre()", function(err, rows){
-        if(err){
+function Book_GetAllGenre(connection, callback) {
+    connection.query("call sp_getAllGenre()", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_GetByAuthor(author, connection, callback){
-    connection.query("call Book_GetByAuthor('" + author + "')", function(err, rows){
-        if(err){
+function Book_GetByAuthor(author, connection, callback) {
+    connection.query("call Book_GetByAuthor('" + author + "')", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_GetByDate(fromDate, toDate, connection, callback){
+function Book_GetByDate(fromDate, toDate, connection, callback) {
     var query = "call Book_GetByDate('" + (fromDate ? fromDate : "null") + "', '"
         + (toDate ? toDate : "null") + "')";
-    connection.query(query, function(err, rows){
-        if(err){
+    connection.query(query, function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
-        };
+        }
+        ;
     });
 }
 
-function Book_GetByDeleted(isDeleted, connection, callback){
-    connection.query("call Book_GetByDeleted(" + isDeleted + ")", function(err, rows){
-        if(err){
+function Book_GetByDeleted(isDeleted, connection, callback) {
+    connection.query("call Book_GetByDeleted(" + isDeleted + ")", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
-            callback(rows[0]);
-        }
-    });
-}
-
-function Book_GetByID(bookID, connection, callback){
-    connection.query("call Book_GetById('" + bookID + "')", function(err, rows){
-        if(err){
-            callback(701);
-        }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_GetByPrice(minPrice, maxPrice, connection, callback){
+function Book_GetByID(bookID, connection, callback) {
+    connection.query("call Book_GetById('" + bookID + "')", function (err, rows) {
+        if (err) {
+            callback(701);
+        }
+        else {
+            callback(rows[0]);
+        }
+    });
+}
+
+function Book_GetByPrice(minPrice, maxPrice, connection, callback) {
     connection.query("call Book_GetByPrice(" + (minPrice ? minPrice : 'null') + ", "
-        + (maxPrice ? maxPrice : 'null') + ")", function(err, rows){
-        if(err){
+        + (maxPrice ? maxPrice : 'null') + ")", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_GetByTitle(title, connection, callback){
-    connection.query("call Book_GetByTitle('" + title + "')", function(err, rows){
-        if(err){
+function Book_GetByTitle(title, connection, callback) {
+    connection.query("call Book_GetByTitle('" + title + "')", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_GetByUserID(userID, connection, callback){
-    connection.query("call Book_GetByUser('" + userID + "')", function(err, rows){
-        if(err){
+function Book_GetByUserID(userID, connection, callback) {
+    connection.query("call Book_GetByUser('" + userID + "')", function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_GetByUserSession(session_id, connection, callback){
-    sessionDao.getUserIdBySessionId(session_id, connection, function(response){
-        if(response != 701){
-            connection.query("call Book_GetByUser('" + response + "')", function(err, rows){
-                if(err){
+function Book_GetByUserSession(session_id, connection, callback) {
+    sessionDao.getUserIdBySessionId(session_id, connection, function (response) {
+        if (response != 701) {
+            connection.query("call Book_GetByUser('" + response + "')", function (err, rows) {
+                if (err) {
                     callback(701);
                 }
-                else{
+                else {
                     callback(rows[0]);
                 }
             });
@@ -340,53 +337,53 @@ function Book_GetByUserSession(session_id, connection, callback){
     });
 }
 
-function Book_Insert(book, connection, callback){
+function Book_Insert(book, connection, callback) {
     var query = "call Book_Insert('" + book.bookid + "', '" + book.title + "', '" + book.author + "', '" + book.photo
         + "', '" + book.hashTag + "', " + book.locationLongitude + ", " + book.locationLatitude + ", '" + book.genre
         + "', '" + book.bookCondition + "', '" + book.action + "', " + book.isDeleted + ", '" + book.createDate + "', '"
         + book.userID + "', " + book.price + ")";
-    connection.query(query, function(err, rows){
-        if(err){
+    connection.query(query, function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows.affectedRows);
         }
     });
 }
 
-function Book_Search(book, connection, callback){
+function Book_Search(book, connection, callback) {
     var query = "call Book_Search('" + (book.titleKeyword ? book.titleKeyword : 'null') + "', '"
         + (book.authorKeyword ? book.authorKeyword : 'null') + "', '" + (book.hashtagKeyword ? book.hashtagKeyword : 'null')
         + "', '" + (book.photoKeyword ? book.photoKeyword : 'null') + "', '" + (book.genreKeyword ? book.genreKeyword : 'null')
         + "')";
-    connection.query(query, function(err, rows){
-        if(err){
+    connection.query(query, function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows[0]);
         }
     });
 }
 
-function Book_Update(book, connection, callback){
+function Book_Update(book, connection, callback) {
     var _isDeleted;
     var query = "call Book_Update('" + book.bookid + "', '" + book.title + "', '" + book.author + "', '" + book.photo
         + "', '" + book.hashTag + "', " + book.locationLongitude + ", " + book.locationLatitude + ", '" + book.genre
         + "', '" + book.bookCondition + "', '" + book.action + "', " + book.isDeleted + ", '" + book.createDate + "', '"
         + book.userID + "', " + book.price + ")";
-    connection.query(query, function(err, rows){
-        if(err){
+    connection.query(query, function (err, rows) {
+        if (err) {
             callback(701);
         }
-        else{
+        else {
             callback(rows.affectedRows);
         }
     });
 }
 
-
+module.exports.getBookInfoByIds = getBookInfoByIds
 module.exports.Book_GetAllGenre = Book_GetAllGenre;
 module.exports.bookTransfer = bookTransfer;
 module.exports.getTopBookByUser = getTopBookByUser;

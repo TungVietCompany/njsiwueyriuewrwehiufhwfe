@@ -393,6 +393,10 @@ app.get('/booxtown/transactionhistory/tranhis_getbyid', function(req, res){
     transHisController.TransacHistory_GetById(req.query.tranhisid, res);
 });
 
+app.get('/booxtown/transactionhistory/tranhis_getbook_byidtrans', function(req, res){
+    transHisController.TransacHistory_GetBookByIdTransaction(req.query.tranhisid, res);
+});
+
 app.get('/booxtown/transactionhistory/tranhis_getbydate', function(req, res){
     transHisController.TransacHistory_GetByDate(req.query.fromdate, req.query.todate, res);
 });

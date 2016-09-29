@@ -44,6 +44,21 @@ function getBookInfoById(book,res) {
     });
 }
 
+function getBookInTransaction(trans_id,res) {
+
+    bookDao.getBookInfoByIds(trans_id, connection, function (response) {
+        if(response.length>0){
+            res.json({code: 200, book: response});
+        }
+        else
+            res.json(new ResponseData(701, "Không tồn tại book cần tìm", ""));
+
+    });
+
+
+
+}
+
 function updateBook(book,res) {
     bookDao.updateBook(book,connection,function (response) {
         if(response != 701)
@@ -276,7 +291,7 @@ function Book_Update(book, res){
             res.json(response);
     });
 }
-
+module.exports.getBookInTransaction =getBookInTransaction
 module.exports.Book_GetAllGenre = Book_GetAllGenre;
 module.exports.bookTransfer = bookTransfer;
 module.exports.getTopBookByUser = getTopBookByUser;

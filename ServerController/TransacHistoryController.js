@@ -4,6 +4,7 @@
 var connection = require('../DatabaseConnection/MysqlConnection');
 var transHisDao = require('../DAO/TransacHistoryDAO');
 var sessionDao = require('../DAO/SessionDAO');
+var bookController=  require('../ServerController/BookController');
 var md5 = require('../Library/MD5');
 var ResponseData = require('../DAO/ResponseData');
 
@@ -80,6 +81,7 @@ function TransacHistory_GetByAccepted(isAccepted, res){
 }
 
 function TransacHistory_Insert(tranHis, res){
+    console.log(tranHis);
     transHisDao.TransacHistory_Insert(tranHis, connection, function(response){
         if(response == '_701_')
             res.json(new ResponseData(701, "Error!", ""));
@@ -106,6 +108,10 @@ function TransacHistory_Update(tranHis, res){
     });
 }
 
+function TransacHistory_GetBookByIdTransaction(transHisID, res){
+   bookController.getBookInTransaction(transHisID,res);
+}
+module.exports.TransacHistory_GetBookByIdTransaction =TransacHistory_GetBookByIdTransaction;
 module.exports.TransacHistory_UpdateStatus = TransacHistory_UpdateStatus;
 module.exports.TransacHistory_Delete = TransacHistory_Delete;
 module.exports.TransacHistory_Filter = TransacHistory_Filter;
