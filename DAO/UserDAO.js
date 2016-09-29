@@ -123,12 +123,12 @@ function getTokenForUser(user_id,connection,callback) {
         });
 }
 
-function updateUserInfo(session_id,user,connection,callback) {
-    sessionDao.getUserIdBySessionId(session_id,connection,function (response) {
+function updateUserInfo(user,connection,callback) {
+    sessionDao.getUserIdBySessionId(user.session_id,connection,function (response) {
         if(response != '_701_')
         {
             connection.query("call sp_updateUser('" + response + "','" + user.first_name + "','" + user.last_name + "','"
-               + user.email + "','" + user.birthday + "','" + user.phone + "')"
+               + user.email + "','" + user.birthday + "','" + user.phone +"','" + user.photo + "')"
                 , function (err, rows) {
                     if (err) {
                         callback(701);
