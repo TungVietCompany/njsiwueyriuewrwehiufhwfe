@@ -49,6 +49,10 @@ app.post('/booxtown/rest/user/checkExpire', function (req, res) {
     userController.User_CheckUserExpire(req.body.session_id, res);
 });
 
+app.get('/booxtown/rest/user/user_getRating', function (req, res) {
+    userController.user_getRating(req.query.user_id, res);
+});
+
 app.post('/booxtown/rest/user/signup_ios', function (req, res) {
     userController.signup(req.query, res);
 });
@@ -409,6 +413,18 @@ app.get('/booxtown/transactionhistory/tranhis_getbyuser', function(req, res){
 
 app.get('/booxtown/transactionhistory/tranhis_getbybook', function(req, res){
     transHisController.TransacHistory_GetByBook(req.query.buybookid, req.query.sellbookid, res);
+});
+
+app.get('/booxtown/rest/transactionhistory/tranhis_getTopTransaction', function(req, res){
+    transHisController.Transaction_getTopTransaction(req.query, res);
+});
+
+app.get('/booxtown/rest/transactionhistory/tranhis_getTransactionById', function(req, res){
+    transHisController.Transaction_getTransactionInfoById(req.query.transaction_id, res);
+});
+
+app.post('/booxtown/rest/transactionhistory/tranhis_updateRating', function(req, res){
+    transHisController.TransacHistory_UpdateRating(req.body, res);
 });
 
 app.get('/booxtown/transactionhistory/tranhis_getbyaccepted', function(req, res){

@@ -114,6 +114,18 @@ function updateUserInforById(user, res) {
     });
 }
 
+function user_getRating(user_id, res) {
+    userDao.user_getRating(user_id, connection, function (response) {
+        if (response != 701) {
+            res.json({code:200,rating:response});
+        }
+        else {
+            res.json({code:701,rating:0});
+        }
+    });
+}
+
+
 //Update user info
 function updateUserInforById_ios(user, res) {
     userDao.updateUserInfo_ios(user, connection, function (response) {
@@ -281,6 +293,7 @@ function User_CheckUserExpire(session_id, res){
     });
 }
 
+module.exports.user_getRating = user_getRating;
 module.exports.User_CheckUserExpire = User_CheckUserExpire;
 module.exports.login_firebase = login_firebase;
 module.exports.userLogout = userLogout;
