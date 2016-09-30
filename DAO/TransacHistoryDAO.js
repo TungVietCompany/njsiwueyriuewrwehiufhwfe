@@ -258,6 +258,10 @@ function Transaction_getTransactionInfoById(transaction_id, connection, callback
                     rows[0][0].book.push(rows[1][i]);
                 }
             }
+            else
+            {
+                rows[0][0].book = [];
+            }
             callback({code: 200, transaction: rows[0][0]});
         });
 }
