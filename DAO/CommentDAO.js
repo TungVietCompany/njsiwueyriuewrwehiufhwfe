@@ -86,14 +86,12 @@ function Comment_GetByUser(userID, connection, callback) {
 }
 
 function Comment_Insert(comment, connection, callback) {
-
     sessionDao.getUserIdBySessionId(comment.session_id, connection, function (response) {
         if (response != '_701_') {
             var query = "call Comment_Insert('" + comment.content + "', now(), "
-            + comment.thread_id + ", " + response + ")";
+            + comment.thread_id + ", " + response + "," + comment.book_id + ")";
             connection.query(query, function (err, rows) {
                 if (err) {
-                    console.log(err);
                     callback(701);
                 }
                 else {
