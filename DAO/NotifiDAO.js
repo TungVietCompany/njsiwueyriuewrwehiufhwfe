@@ -56,7 +56,6 @@ function Notification_AddStatus(notifi, connection, callback){
 }
 
 function Notification_GetTop(notifi, connection, callback){
-    console.log(notifi);
     sessionDao.getUserIdBySessionId(notifi.session_id,connection,function (response) {
         if (response != '_701_') {
             var query = "call sp_GetTopNotification(" + notifi.top + "," +

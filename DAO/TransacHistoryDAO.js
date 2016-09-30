@@ -105,14 +105,49 @@ function TransacHistory_UpdateStatus(transHis, connection, callback) {
                     callback(200);
                 }
             });
-        } else
+
+            if (transHis.status_id == '1') {
+                var query = "call sp_getTranactionById(" + transHis.trans_id + ")";
+                connection.query(query
+                    , function (err, rowst) {
+                        if (err) {
+                            callback(701);
+                        } else {
+                            var query;
+                            var hihi = rowst[0][0].book_seller_id;
+                            if (rowst[0][0].action == 'swap') {
+                                query = "call SwapBook(" + rowst[0][0].user_buyer_id + ", "
+                                    + rowst[0][0].user_seller_id + "," + transHis.book_seller_id + "," + hihi + ")";
+                            }
+                            else if (rowst[0][0].action == 'buy'){
+                                query = "call sp_buyBook(" + rowst[0][0].user_buyer_id + ", "
+                                    + rowst[0][0].book_seller_id + ")";
+                            }
+                            if(rowst[0][0].action == 'swap' || rowst[0][0].action == 'buy')
+                            {
+                                console.log(transHis);
+                                connection.query(query, function (err, rowss) {
+                                    if(err)
+                                    {
+                                        console.log(err);
+                                    }
+                                });
+                            }
+
+                        }
+                    });
+            }
+        }
+        else
+        {
             callback(701);
+        }
     });
 }
 
 function TransacHistory_UpdateRating(transHis, connection, callback) {
     var query = "call sp_updateRating(" + transHis.trans_id + ", "
-        + transHis.user_promp + ","+ transHis.user_cour + ","+ transHis.user_quality + ")";
+        + transHis.user_promp + "," + transHis.user_cour + "," + transHis.user_quality + ")";
     connection.query(query, function (err, rows) {
         if (err) {
             callback(701);
@@ -132,28 +167,23 @@ function TransacHistory_Insert(transHis, connection, callback) {
                 + transHis.sellBookID + ", '" + transHis.action + "');";
             connection.query(query, function (err, rows) {
                 if (err) {
-                    console.log(err);
                     callback('_701_');
                 }
                 else {
-                        if(transHis.action == "swap")
-                        {
-                            TransacHistory_InsertBookSwap(rows[0][0].id, transHis.buyBookID,connection, function (response) {
-                                if(response != '_701_')
-                                {
-                                    callback(rows[0][0].id);
-                                }
-                                else
-                                {
-                                    callback('_701_');
-                                }
-                            });
+                    if (transHis.action == "swap") {
+                        TransacHistory_InsertBookSwap(rows[0][0].id, transHis.buyBookID, connection, function (response) {
+                            if (response != '_701_') {
+                                callback(rows[0][0].id);
+                            }
+                            else {
+                                callback('_701_');
+                            }
+                        });
 
-                        }
-                        else
-                        {
-                            callback(rows[0][0].id);
-                        }
+                    }
+                    else {
+                        callback(rows[0][0].id);
+                    }
 
                 }
             });
@@ -162,15 +192,13 @@ function TransacHistory_Insert(transHis, connection, callback) {
     });
 }
 
-function TransacHistory_InsertBookSwap(id,buyBookID,connection,callback) {
+function TransacHistory_InsertBookSwap(id, buyBookID, connection, callback) {
     var listSwap = buyBookID.split("_+_");
     var i = 0;
     var query = "INSERT INTO book_swap (transaction_id,book_id) VALUES ";
-    for(i = 0;i<listSwap.length;i++)
-    {
-        query += "(" + id + ","+listSwap[i] + ")";
-        if(i < listSwap.length - 1)
-        {
+    for (i = 0; i < listSwap.length; i++) {
+        query += "(" + id + "," + listSwap[i] + ")";
+        if (i < listSwap.length - 1) {
             query += ",";
         }
     }
@@ -178,8 +206,7 @@ function TransacHistory_InsertBookSwap(id,buyBookID,connection,callback) {
         if (err) {
             callback('_701_');
         }
-        else
-        {
+        else {
             callback(id);
         }
     });
@@ -224,16 +251,14 @@ function Transaction_getTransactionInfoById(transaction_id, connection, callback
             if (err) {
                 callback(701);
             }
-            if(rows[0][0].action == 'swap')
-            {
+            if (rows[0][0].action == 'swap') {
                 rows[0][0].book = [];
                 var i = 0;
-                for( i = 0;i<rows[1].length;i++)
-                {
+                for (i = 0; i < rows[1].length; i++) {
                     rows[0][0].book.push(rows[1][i]);
                 }
             }
-            callback({code: 200, transaction:rows[0][0]});
+            callback({code: 200, transaction: rows[0][0]});
         });
 }
 

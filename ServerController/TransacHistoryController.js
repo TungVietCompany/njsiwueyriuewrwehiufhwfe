@@ -115,7 +115,6 @@ function TransacHistory_GetByAccepted(isAccepted, res){
 }
 
 function TransacHistory_Insert(tranHis, res){
-    console.log(tranHis);
     transHisDao.TransacHistory_Insert(tranHis, connection, function(response){
         if(response == '_701_')
             res.json(new ResponseData(701, "Error!", ""));

@@ -135,7 +135,7 @@ function sendMultiUserKeyIOS(result, res) {
     var id_screen;
     taget_id = '_' + result.user_id + '_';
     content = result.messages;
-    title = result.title_notifi;
+    title = result.title_notification;
     key_screen = result.key_screen;
     id_screen = result.id_screen;
 
