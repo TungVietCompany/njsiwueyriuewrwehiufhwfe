@@ -90,6 +90,10 @@ app.post('/booxtown/rest/user/logout', function (req, res) {
     userController.userLogout(req.body, res);
 });
 
+app.get('/booxtown/rest/user/getProfileByUserId', function (req, res) {
+    userController.getUserInforByUserId(req.query.user_id, res);
+});
+
 app.post('/booxtown/rest/user/forgotpassword', function (req, res) {
     emailController.sendEmailToRestorePassword(req.body.email, res);
 });
@@ -119,6 +123,13 @@ app.post('/booxtown/rest/book/update', function (req, res) {
 app.get('/booxtown/rest/book/getinfo', function (req, res) {
     bookController.getBookInfoById(req.query, res);
 });
+
+app.get('/booxtown/rest/book/book_gettopbyuserid', function (req, res) {
+    bookController.getTopBookByUserId(req.query,res);
+});
+
+
+
 //DungNS 11-9-2016 -------------------
 
 
@@ -533,6 +544,8 @@ app.post('/booxtown/rest/setting/setting_insert', function (req, res) {
 app.post('/booxtown/rest/setting/setting_update', function (req, res) {
     settingController.Setting_Update(req.body,res);
 });
+
+
 
 //Upload Image
 var storage = multer.diskStorage({
