@@ -46,9 +46,44 @@ function sendEmailToRestorePassword(email,res) {
 
 }
 
+function inviteFriend(email,res) {
+    var error = new ResponseData(701,"Failed","");
+    var success = new ResponseData(200,"Success","");
+    try{
+        var nodemailer = require('nodemailer');
+
+        var transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'viet.ptit.17@gmail.com',
+                pass: 'ohmygod17'
+            }
+        });
+
+        var mailOptions = {
+            from: 'viet.ptit.17@gmail.com',
+            to: email,
+            subject: 'BooxTown - Invite',
+            text: 'I want to invite you'
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                res.json(error);
+            }
+            res.json(success);
+
+        });
+    }catch (e)
+    {
+        res.json(error);
+    }
+}
+
 function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
+module.exports.inviteFriend = inviteFriend;
 module.exports.sendEmailToRestorePassword = sendEmailToRestorePassword;
 

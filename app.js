@@ -98,6 +98,10 @@ app.post('/booxtown/rest/user/forgotpassword', function (req, res) {
     emailController.sendEmailToRestorePassword(req.body.email, res);
 });
 
+app.post('/booxtown/rest/user/inviteFriend', function (req, res) {
+    emailController.inviteFriend(req.body.email, res);
+});
+
 //Book Service
 
 app.get('/booxtown/rest/book/getAllGenre', function (req, res) {

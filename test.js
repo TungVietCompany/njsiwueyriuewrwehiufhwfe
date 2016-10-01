@@ -1,56 +1,29 @@
-var express   =    require("express");
-var mysql     =    require('mysql');
-var app       =    express();
+try{
+    var nodemailer = require('nodemailer');
 
-var pool      =    mysql.createPool({
-    host     : '103.237.147.54',
-    user     : 'boxtown',
-    password : 'boxtown2016',
-    database : 'booxtown_sql',
-    dateStrings: true
-});
-
-function handle_database(req,res) {
-
-    pool.getConnection(function(err,connection){
-        if (err) {
-            res.json({"code" : 100, "status" : "Error in connection database"});
-            return;
-        }
-
-        console.log('connected as id ' + connection.threadId);
-
-        connection.query("select * from user",function(err,rows){
-            connection.release();
-            if(!err) {
-                res.json(rows);
-            }
-        });
-
-        connection.on('error', function(err) {
-            res.json({"code" : 100, "status" : "Error in connection database"});
-            return;
-        });
-    });
-}
-
-function test(connection) {
-    connection.query("select * from user",function(err,rows){
-        connection.release();
-        if(!err) {
-            res.json(rows);
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'viet.ptit.17@gmail.com',
+            pass: 'ohmygod17'
         }
     });
-}
 
-var getConnection = function(callback) {
-    pool.getConnection(function(err, connection) {
-        callback(connection);
+    var mailOptions = {
+        from: 'viet.ptit.17@gmail.com',
+        to: 'viet.ptit.17@gmail.com,Tung.ars150293@gmail.com',
+        subject: 'BooxTown - New Password',
+        text: 'Your new password is: 12312312312'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+        }
+        console.log('success');
+
     });
-};
-
-app.get("/",function(req,res){
-    test(getConnection());
-});
-
-app.listen(3000);
+}catch (e)
+{
+    console.log(e);
+}
