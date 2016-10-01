@@ -128,7 +128,9 @@ app.get('/booxtown/rest/book/book_gettopbyuserid', function (req, res) {
     bookController.getTopBookByUserId(req.query,res);
 });
 
-
+app.get('/booxtown/rest/book/book_getBookByBookId', function (req, res) {
+    bookController.getBookByBookId(req.query.book_id,res);
+});
 
 //DungNS 11-9-2016 -------------------
 

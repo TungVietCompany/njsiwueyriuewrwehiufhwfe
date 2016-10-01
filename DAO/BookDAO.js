@@ -1,8 +1,7 @@
 var md5 = require('../Library/MD5');
 var sessionDao = require('./SessionDAO');
-
 function addBook(book, connection, callback) {
-    console.log(book);
+
     sessionDao.getUserIdBySessionId(book.session_id, connection, function (response) {
         if (response != '_701_') {
             var query = "call sp_insert_book('"
@@ -127,6 +126,16 @@ function getTopBook(book, connection, callback) {
     });
 }
 
+function getBookByBookId(book_id, connection, callback) {
+    var query = "call sp_GetBookByBookId(" + book_id +")";
+    connection.query(query
+        , function (err, rows) {
+            if (err) {
+                callback(701);
+            }
+            callback(rows[0]);
+        });
+}
 
 function getAllBookByUserId(session_id, connection, callback) {
     sessionDao.getUserIdBySessionId(session_id, connection, function (response) {
@@ -396,6 +405,7 @@ function Book_Update(book, connection, callback) {
 }
 
 
+module.exports.getBookByBookId = getBookByBookId;
 module.exports.getTopBookByUserId = getTopBookByUserId;
 module.exports.getBookInfoByIds = getBookInfoByIds;
 module.exports.Book_GetAllGenre = Book_GetAllGenre;

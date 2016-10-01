@@ -72,6 +72,25 @@ function updateBook(book,res) {
     });
 }
 
+function getBookByBookId(book_id,res) {
+    bookDao.getBookByBookId(book_id,connection,function (response) {
+        if(response != 701)
+        {
+            var listBook = [];
+            var i = 0;
+            for(i = 0;i<response.length;i++)
+            {
+                listBook.push(response[i]);
+            }
+            res.json({code: 200, book: listBook});
+        }
+        else
+        {
+            res.json(new ResponseData(701, "Không tồn tại book cần tìm", ""));
+        }
+    });
+}
+
 function getAllBookByUserId(session_id,res) {
     bookDao.getAllBookByUserId(session_id,connection,function (response) {
         if(response != 701)
@@ -310,7 +329,7 @@ function Book_Update(book, res){
     });
 }
 
-
+module.exports.getBookByBookId =getBookByBookId;
 module.exports.getTopBookByUserId =getTopBookByUserId;
 module.exports.getBookInTransaction =getBookInTransaction;
 module.exports.Book_GetAllGenre = Book_GetAllGenre;
