@@ -102,6 +102,19 @@ function getUserInforById(session_id, res) {
     });
 }
 
+function getUserInforByUserId(user_id,res) {
+    userDao.getUserInforById(user_id, connection, function (response) {
+        var listUser = [];
+        listUser.push(response);
+        if (response != 701) {
+            res.json({code: 200, user: listUser});
+        }
+        else {
+            res.json(new ResponseData(701, "Session ID không tồn tại", ""));
+        }
+    });
+}
+
 //Update user info
 function updateUserInforById(user, res) {
     userDao.updateUserInfo(user, connection, function (response) {
@@ -293,6 +306,8 @@ function User_CheckUserExpire(session_id, res){
     });
 }
 
+
+module.exports.getUserInforByUserId = getUserInforByUserId;
 module.exports.user_getRating = user_getRating;
 module.exports.User_CheckUserExpire = User_CheckUserExpire;
 module.exports.login_firebase = login_firebase;

@@ -135,12 +135,11 @@ function sendMultiUserKeyIOS(result, res) {
     var id_screen;
     taget_id = '_' + result.user_id + '_';
     content = result.messages;
-    title = result.title_notification;
+    title = result.title_notifi;
     key_screen = result.key_screen;
     id_screen = result.id_screen;
 
     var s_id = MD5.getMD5ByTime("");
-
     notifiController.Notification_Insert(taget_id, content, title, key_screen, id_screen, s_id, res);
     var notifi_id;
     notifiDAO.getNotifiID(s_id, connection, function (response) {
