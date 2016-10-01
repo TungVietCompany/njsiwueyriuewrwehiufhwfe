@@ -96,7 +96,7 @@ function TransacHistory_UpdateStatus(transHis, connection, callback) {
     sessionDao.getUserIdBySessionId(transHis.session_id, connection, function (response) {
         if (response != '_701_') {
             var query = "call sp_updateTransactionStatus(" + transHis.trans_id + ", "
-                + transHis.status_id + ")";
+                + transHis.status_id + ","+transHis.book_seller_id +")";
             connection.query(query, function (err, rows) {
                 if (err) {
                     callback(701);
