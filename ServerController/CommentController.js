@@ -53,6 +53,48 @@ function Comment_GetByID(commentID, res) {
     });
 }
 
+function Comment_GetTopByBookId(book, res) {
+    commentDao.Comment_GetTopByBookId(book, connection, function (response) {
+        if (response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            var listComment = [];
+        var i = 0;
+        for (i = 0; i < response.length; i++) {
+            listComment.push(response[i]);
+        }
+        res.json({code:200,comment : listComment});
+    });
+}
+
+function Comment_GetByBookId(book_id, res) {
+    commentDao.Comment_GetByBookId(book_id, connection, function (response) {
+        if (response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            var listComment = [];
+        var i = 0;
+        for (i = 0; i < response.length; i++) {
+            listComment.push(response[i]);
+        }
+        res.json({code:200,comment : listComment});
+    });
+}
+
+function Comment_GetTopByThread(thread, res) {
+    commentDao.Comment_GetTopByThread(thread, connection, function (response) {
+        if (response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            var listComment = [];
+        var i = 0;
+        for (i = 0; i < response.length; i++) {
+            listComment.push(response[i]);
+        }
+        res.json({code:200,comment : listComment});
+    });
+}
+
 function Comment_GetByThread(threadID, res) {
     commentDao.Comment_GetByThread(threadID, connection, function (response) {
         if (response == 701)
@@ -94,6 +136,9 @@ function Comment_Update(comment, res) {
     });
 }
 
+module.exports.Comment_GetTopByThread = Comment_GetTopByThread;
+module.exports.Comment_GetTopByBookId = Comment_GetTopByBookId;
+module.exports.Comment_GetByBookId = Comment_GetByBookId;
 module.exports.Comment_Delete = Comment_Delete;
 module.exports.Comment_Filter = Comment_Filter;
 module.exports.Comment_GetAll = Comment_GetAll;

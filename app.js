@@ -205,6 +205,19 @@ app.get('/booxtown/comment/comment_getbyid', function(req, res){
     commentController.Comment_GetByID(req.query.commentid, res);
 });
 
+
+app.get('/booxtown/rest/comment/comment_getByBookId', function(req, res){
+    commentController.Comment_GetByBookId(req.query.book_id, res);
+});
+
+app.get('/booxtown/rest/comment/comment_getTopByBookId', function(req, res){
+    commentController.Comment_GetTopByBookId(req.query, res);
+});
+
+app.get('/booxtown/rest/comment/comment_getTopByThread', function(req, res){
+    commentController.Comment_GetTopByThread(req.query, res);
+});
+
 app.get('/booxtown/rest/comment/comment_getbythread', function(req, res){
     commentController.Comment_GetByThread(req.query.thread_id, res);
 });

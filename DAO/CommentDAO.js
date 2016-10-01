@@ -64,7 +64,42 @@ function Comment_GetByID(commentID, connection, callback) {
 }
 
 function Comment_GetByThread(threadID, connection, callback) {
-    connection.query("call Comment_GetByThread('" + threadID + "')", function (err, rows) {
+    connection.query("call Comment_GetByThread(" + threadID + ")", function (err, rows) {
+        if (err) {
+            callback(701);
+        }
+        else {
+            callback(rows[0]);
+        }
+    });
+}
+
+
+function Comment_GetByBookId(book_id, connection, callback) {
+    connection.query("call Comment_GetByBookId('" + book_id + "')", function (err, rows) {
+        if (err) {
+            callback(701);
+        }
+        else {
+            callback(rows[0]);
+        }
+    });
+}
+
+function Comment_GetTopByThread(thread, connection, callback) {
+    connection.query("call Comment_GetTopByThread(" + thread.thread_id + "," + thread.top + "," + thread.from + ")", function (err, rows) {
+        if (err) {
+            callback(701);
+        }
+        else {
+            callback(rows[0]);
+        }
+    });
+}
+
+
+function Comment_GetTopByBookId(book, connection, callback) {
+    connection.query("call Comment_GetTopByBookId(" + book.book_id + "," + book.top + "," + book.from +")", function (err, rows) {
         if (err) {
             callback(701);
         }
@@ -119,6 +154,10 @@ function Comment_Update(comment, connection, callback) {
     });
 }
 
+
+module.exports.Comment_GetTopByThread = Comment_GetTopByThread;
+module.exports.Comment_GetTopByBookId = Comment_GetTopByBookId;
+module.exports.Comment_GetByBookId = Comment_GetByBookId;
 module.exports.Comment_Delete = Comment_Delete;
 module.exports.Comment_Filter = Comment_Filter;
 module.exports.Comment_GetAll = Comment_GetAll;
