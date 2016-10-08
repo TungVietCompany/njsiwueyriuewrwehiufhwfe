@@ -93,7 +93,7 @@ function getNotifiID(s_id,connection,callback) {
             }
         });
 }
-module.exports.getNotifiID=getNotifiID
+module.exports.getNotifiID=getNotifiID;
 module.exports.Notification_GetTop = Notification_GetTop;
 module.exports.Notification_AddStatus = Notification_AddStatus;
 module.exports.Notification_RemoveStatus = Notification_RemoveStatus;

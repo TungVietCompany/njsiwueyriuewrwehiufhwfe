@@ -15,7 +15,7 @@ var MD5 = require('./Library/MD5');
 var express = require('express');
 var app = express();
 var server = require("http").createServer(app);
-server.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 2222);
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -92,6 +92,10 @@ app.post('/booxtown/rest/user/logout', function (req, res) {
 
 app.get('/booxtown/rest/user/getProfileByUserId', function (req, res) {
     userController.getUserInforByUserId(req.query.user_id, res);
+});
+
+app.post('/booxtown/rest/user/insertContact', function (req, res) {
+    userController.insertContact(req.body, res);
 });
 
 app.post('/booxtown/rest/user/forgotpassword', function (req, res) {
@@ -231,6 +235,11 @@ app.get('/booxtown/rest/comment/comment_getTopByBookId', function(req, res){
     commentController.Comment_GetTopByBookId(req.query, res);
 });
 
+
+app.get('/booxtown/rest/comment/comment_getTopByWishboardId', function(req, res){
+    commentController.Comment_GetTopByWishboardId(req.query, res);
+});
+
 app.get('/booxtown/rest/comment/comment_getTopByThread', function(req, res){
     commentController.Comment_GetTopByThread(req.query, res);
 });
@@ -272,7 +281,7 @@ app.get('/booxtown/post/post_getbydate', function(req, res){
 });
 
 app.get('/booxtown/post/post_getbyid', function(req, res){
-    postController.Post_GetByID(req.query.postid, res);
+    postController.Post_GetByID(req.query.post_id, res);
 });
 
 app.get('/booxtown/post/post_getbytitle', function(req, res){
@@ -289,6 +298,10 @@ app.get('/booxtown/post/post_getbyusersession', function(req, res){
 
 app.get('/booxtown/rest/post/post_gettop', function(req, res){
     postController.Post_GetTop(req.query, res);
+});
+
+app.get('/booxtown/rest/post/post_getpostbyid', function(req, res){
+    postController.Post_GetPostById(req.query.post_id, res);
 });
 
 app.post('/booxtown/rest/post/post_insert', function(req, res){

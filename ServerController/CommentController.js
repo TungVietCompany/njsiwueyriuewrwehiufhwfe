@@ -67,6 +67,20 @@ function Comment_GetTopByBookId(book, res) {
     });
 }
 
+function Comment_GetTopByWishboardId(wishboard, res) {
+    commentDao.Comment_GetTopByWishboardId(wishboard, connection, function (response) {
+        if (response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            var listComment = [];
+        var i = 0;
+        for (i = 0; i < response.length; i++) {
+            listComment.push(response[i]);
+        }
+        res.json({code:200,comment : listComment});
+    });
+}
+
 function Comment_GetByBookId(book_id, res) {
     commentDao.Comment_GetByBookId(book_id, connection, function (response) {
         if (response == 701)
@@ -135,7 +149,7 @@ function Comment_Update(comment, res) {
             res.json(response);
     });
 }
-
+module.exports.Comment_GetTopByWishboardId=Comment_GetTopByWishboardId;
 module.exports.Comment_GetTopByThread = Comment_GetTopByThread;
 module.exports.Comment_GetTopByBookId = Comment_GetTopByBookId;
 module.exports.Comment_GetByBookId = Comment_GetByBookId;

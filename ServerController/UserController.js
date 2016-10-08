@@ -68,6 +68,17 @@ function login(user, res) {
     });
 }
 
+function insertContact(contact, res) {
+    userDao.insertContact(contact, connection, function (response) {
+        if (response != 701) {
+            res.json(new ResponseData(200, "Success", response));
+        }
+        else {
+            res.json(new ResponseData(701, "Failed", ""));
+        }
+    });
+}
+
 function login_firebase(user, res) {
     userDao.userLogin_firebase(user, connection, function (response) {
         if (response != 701) {
@@ -306,7 +317,7 @@ function User_CheckUserExpire(session_id, res){
     });
 }
 
-
+module.exports.insertContact = insertContact;
 module.exports.getUserInforByUserId = getUserInforByUserId;
 module.exports.user_getRating = user_getRating;
 module.exports.User_CheckUserExpire = User_CheckUserExpire;

@@ -123,7 +123,7 @@ function Post_Insert(post, connection, callback) {
                     callback(701);
                 }
                 else {
-                    callback(rows.affectedRows);
+                    callback(rows[0][0]);
                 }
             });
         } else {
@@ -147,6 +147,18 @@ function Post_GetTop(post, connection, callback){
         }
         else {
             callback(701);
+        }
+    });
+}
+
+function Post_GetPostById(post_id, connection, callback){
+    var query = "call sp_getPostById(" + post_id +")";
+    connection.query(query, function (err, rows) {
+        if (err) {
+            callback(701);
+        }
+        else {
+            callback(rows[0]);
         }
     });
 }
@@ -177,6 +189,7 @@ function Post_Update(post, connection, callback) {
     });
 }
 
+module.exports.Post_GetPostById = Post_GetPostById;
 module.exports.Post_GetTop = Post_GetTop;
 module.exports.Post_Delete = Post_Delete;
 module.exports.Post_Filter = Post_Filter;

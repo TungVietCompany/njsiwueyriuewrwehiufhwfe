@@ -147,9 +147,10 @@ function TransacHistory_UpdateStatus(transHis, connection, callback) {
 
 function TransacHistory_UpdateRating(transHis, connection, callback) {
     var query = "call sp_updateRating(" + transHis.trans_id + ", "
-        + transHis.user_promp + "," + transHis.user_cour + "," + transHis.user_quality + ")";
+        + transHis.user_promp + "," + transHis.user_cour + "," + transHis.user_quality + "," + transHis.status_id +")";
     connection.query(query, function (err, rows) {
         if (err) {
+            console.log(err);
             callback(701);
         }
         else {

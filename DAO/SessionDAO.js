@@ -10,6 +10,7 @@ function getUserIdBySessionId(session_id,connection,callback) {
             //var user_id = 21;
             if(user_id != null)
             {
+                console.log(user_id);
                 callback(user_id);
             }
             else

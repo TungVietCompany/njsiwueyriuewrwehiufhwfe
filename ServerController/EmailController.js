@@ -26,7 +26,7 @@ function sendEmailToRestorePassword(email,res) {
                 from: 'viet.ptit.17@gmail.com',
                 to: email,
                 subject: 'BooxTown - New Password',
-                text: 'Your new password is: '+password
+                text: 'Welcome to BooxTown. Your new password is: '+password
             };
 
             transporter.sendMail(mailOptions, function(error, info){
@@ -64,11 +64,12 @@ function inviteFriend(email,res) {
             from: 'viet.ptit.17@gmail.com',
             to: email,
             subject: 'BooxTown - Invite',
-            text: 'I want to invite you'
+            text: 'Welcome to BooxTown 2016'
         };
 
         transporter.sendMail(mailOptions, function(error, info){
             if(error){
+                console.log(error);
                 res.json(error);
             }
             res.json(success);

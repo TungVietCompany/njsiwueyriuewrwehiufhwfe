@@ -109,6 +109,17 @@ function Comment_GetTopByBookId(book, connection, callback) {
     });
 }
 
+function Comment_GetTopByWishboardId(wishboard, connection, callback) {
+    connection.query("call Comment_GetTopByWishboardId(" + wishboard.post_id + "," + wishboard.top + "," + wishboard.from +")", function (err, rows) {
+        if (err) {
+            callback(701);
+        }
+        else {
+            callback(rows[0]);
+        }
+    });
+}
+
 function Comment_GetByUser(userID, connection, callback) {
     connection.query("call Comment_GetByUser('" + userID + "')", function (err, rows) {
         if (err) {
@@ -124,7 +135,8 @@ function Comment_Insert(comment, connection, callback) {
     sessionDao.getUserIdBySessionId(comment.session_id, connection, function (response) {
         if (response != '_701_') {
             var query = "call Comment_Insert('" + comment.content + "', now(), "
-            + comment.thread_id + ", " + response + "," + comment.book_id + ")";
+            + comment.thread_id + ", " + response + "," + comment.book_id + "," + comment.post_id +")";
+            console.log(query);
             connection.query(query, function (err, rows) {
                 if (err) {
                     callback(701);
@@ -141,9 +153,11 @@ function Comment_Insert(comment, connection, callback) {
 
 }
 
+
 function Comment_Update(comment, connection, callback) {
     var query = "call Comment_Update('" + comment.commentid + "', '" + comment.content + "', '" + comment.createDate + "', '"
         + comment.threadid + "', '" + comment.userid + "')";
+
     connection.query(query, function (err, rows) {
         if (err) {
             callback(701);
@@ -154,7 +168,7 @@ function Comment_Update(comment, connection, callback) {
     });
 }
 
-
+module.exports.Comment_GetTopByWishboardId =Comment_GetTopByWishboardId;
 module.exports.Comment_GetTopByThread = Comment_GetTopByThread;
 module.exports.Comment_GetTopByBookId = Comment_GetTopByBookId;
 module.exports.Comment_GetByBookId = Comment_GetByBookId;

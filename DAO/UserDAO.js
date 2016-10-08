@@ -143,6 +143,25 @@ function updateUserInfo(user,connection,callback) {
     });
 }
 
+function insertContact(contact,connection,callback) {
+    sessionDao.getUserIdBySessionId(contact.session_id,connection,function (response) {
+        if(response != '_701_')
+        {
+            connection.query("call sp_insertContact('" + contact.content + "'," + response + ",now())"
+                , function (err, rows) {
+                    if (err) {
+                        callback(701);
+                    }
+                    callback(200);
+                });
+        }
+        else
+        {
+            callback(701);
+        }
+    });
+}
+
 function checkValidUsernameAndOldPassword(session_id,pwd_old,connection,callback) {
     connection.query("CALL sp_checkValidUsernameAndOldPassword('" + session_id +"','"+pwd_old+"')"
         , function (err, rows) {
@@ -382,6 +401,8 @@ function User_CheckUserExpire(session_id, connection, callback){
     });
 }
 
+
+module.exports.insertContact = insertContact;
 module.exports.user_getRating = user_getRating;
 module.exports.User_CheckUserExpire = User_CheckUserExpire;
 module.exports.userLogin_firebase = userLogin_firebase;

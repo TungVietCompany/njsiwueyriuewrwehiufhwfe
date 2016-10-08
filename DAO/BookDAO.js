@@ -14,7 +14,7 @@ function addBook(book, connection, callback) {
                     if (err) {
                         callback(701);
                     }
-                    callback(200);
+                    callback(rows[0][0]);
                 });
         }
         else {

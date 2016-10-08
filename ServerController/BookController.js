@@ -7,7 +7,7 @@ function addBook(book,res) {
     bookDao.addBook(book,connection,function (response) {
         if(response != 701)
         {
-            res.json(new ResponseData(200, "Thêm mới thành công", ""));
+            res.json(new ResponseData(200, "Thêm mới thành công",  response.book_id));
         }
         else
         {
