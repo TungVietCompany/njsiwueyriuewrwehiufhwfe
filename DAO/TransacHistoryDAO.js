@@ -3,7 +3,8 @@
  */
 var md5 = require('../Library/MD5');
 var sessionDao = require('./SessionDAO');
-
+var notifi_controller = require('../ServerController/NotificationController');
+var firebase_controller = require('../ServerController/FirebaseController');
 
 function TransacHistory_Delete(transHisid, connection, callback) {
     connection.query("call TransacHistory_Delete('" + transHisid + "')", function (err, rows) {
@@ -95,7 +96,7 @@ function TransacHistory_GetByAccepted(isAccepted, connection, callback) {
 function TransacHistory_UpdateStatus(transHis, connection, callback) {
     sessionDao.getUserIdBySessionId(transHis.session_id, connection, function (response) {
         if (response != '_701_') {
-            var query = "call sp_updateTransactionStatus(" + transHis.trans_id + ", "
+            var query = "call sp_updateTransactionStatus1(" + transHis.trans_id + ", "
                 + transHis.status_id + ","+transHis.book_seller_id +")";
             connection.query(query, function (err, rows) {
                 if (err) {
@@ -103,6 +104,12 @@ function TransacHistory_UpdateStatus(transHis, connection, callback) {
                 }
                 else {
                     callback(200);
+                }
+                for(var i = 0; i < rows[0].length;i++)
+                {
+                    notifi_controller.Notification_Insert(rows[0][i].user_buyer_id, "Your buy request is canceled", "Cancel Transaction",
+                        rows[0][i].id, 12, md5.getMD5ByTime(""), '');
+                    firebase_controller.sendMessageToUserKey1(rows[0][i].session_id);
                 }
             });
 
@@ -125,7 +132,6 @@ function TransacHistory_UpdateStatus(transHis, connection, callback) {
                             }
                             if(rowst[0][0].action == 'swap' || rowst[0][0].action == 'buy')
                             {
-                                console.log(transHis);
                                 connection.query(query, function (err, rowss) {
                                     if(err)
                                     {
@@ -136,6 +142,7 @@ function TransacHistory_UpdateStatus(transHis, connection, callback) {
 
                         }
                     });
+
             }
         }
         else
@@ -267,6 +274,34 @@ function Transaction_getTransactionInfoById(transaction_id, connection, callback
         });
 }
 
+function TransacHistory_CheckTransactionExits(transHis, connection, callback) {
+
+    sessionDao.getUserIdBySessionId(transHis.session_id, connection, function (response) {
+        if (response != '_701_') {
+            var query = "call sp_CheckTransactionExits(" + transHis.user_seller_id + ", "
+                + response + "," + transHis.book_seller_id + ")";
+            connection.query(query, function (err, rows) {
+                if (err) {
+                    callback(701);
+                }
+                else {
+                    if(rows[0].length > 0)
+                    {
+                        callback(701);
+                    }
+                    else
+                    {
+                        callback(200);
+                    }
+                }
+            });
+        } else
+            callback(701);
+    });
+}
+
+
+module.exports.TransacHistory_CheckTransactionExits = TransacHistory_CheckTransactionExits;
 module.exports.TransacHistory_UpdateRating = TransacHistory_UpdateRating;
 module.exports.Transaction_getTopTransaction = Transaction_getTopTransaction;
 module.exports.Transaction_getTransactionInfoById = Transaction_getTransactionInfoById;

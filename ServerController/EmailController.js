@@ -17,13 +17,13 @@ function sendEmailToRestorePassword(email,res) {
             var transporter = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
-                    user: 'viet.ptit.17@gmail.com',
-                    pass: 'ohmygod17'
+                    user: 'booxtown2016@gmail.com',
+                    pass: 'ohmygod2016'
                 }
             });
 
             var mailOptions = {
-                from: 'viet.ptit.17@gmail.com',
+                from: 'booxtown2016@gmail.com',
                 to: email,
                 subject: 'BooxTown - New Password',
                 text: 'Welcome to BooxTown. Your new password is: '+password
@@ -55,13 +55,13 @@ function inviteFriend(email,res) {
         var transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'viet.ptit.17@gmail.com',
-                pass: 'ohmygod17'
+                user: 'booxtown2016@gmail.com',
+                pass: 'ohmygod2016'
             }
         });
 
         var mailOptions = {
-            from: 'viet.ptit.17@gmail.com',
+            from: 'booxtown2016@gmail.com',
             to: email,
             subject: 'BooxTown - Invite',
             text: 'Welcome to BooxTown 2016'

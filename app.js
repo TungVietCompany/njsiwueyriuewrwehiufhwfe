@@ -15,7 +15,7 @@ var MD5 = require('./Library/MD5');
 var express = require('express');
 var app = express();
 var server = require("http").createServer(app);
-server.listen(process.env.PORT || 2222);
+server.listen(process.env.PORT || 3000);
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -484,6 +484,10 @@ app.post('/booxtown/rest/transaction/transaction_updateStatus', function(req, re
 
 app.post('/booxtown/transactionhistory/tranhis_update', function(req, res){
     transHisController.TransacHistory_Update(req.body, res);
+});
+
+app.post('/booxtown/transactionhistory/tranhis_checkTransactionExits', function(req, res){
+    transHisController.TransacHistory_CheckTransactionExits(req.body, res);
 });
 
 app.delete('/booxtown/user/user_delete', function(req, res){

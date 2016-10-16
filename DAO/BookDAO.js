@@ -12,6 +12,7 @@ function addBook(book, connection, callback) {
             connection.query(query
                 , function (err, rows) {
                     if (err) {
+                        console.log(err);
                         callback(701);
                     }
                     callback(rows[0][0]);

@@ -145,7 +145,16 @@ function TransacHistory_GetBookByIdTransaction(transHisID, res){
    bookController.getBookInTransaction(transHisID,res);
 }
 
+function TransacHistory_CheckTransactionExits(tranHis, res){
+    transHisDao.TransacHistory_CheckTransactionExits(tranHis, connection, function(response){
+        if(response == 701)
+            res.json(new ResponseData(701, "Error!", ""));
+        else
+            res.json(new ResponseData(200, "Success!",  ""));
+    });
+}
 
+module.exports.TransacHistory_CheckTransactionExits = TransacHistory_CheckTransactionExits;
 module.exports.TransacHistory_UpdateRating =TransacHistory_UpdateRating;
 module.exports.Transaction_getTopTransaction =Transaction_getTopTransaction;
 module.exports.Transaction_getTransactionInfoById =Transaction_getTransactionInfoById;

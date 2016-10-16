@@ -32,6 +32,32 @@ function sendMessageToUser(deviceId, message) {
     });
 }
 
+function sendMessageToUserKey1(deviceId) {
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+        to: deviceId,
+        collapse_key: 'your_collapse_key',
+
+        notification: {
+            title: "Hello",
+            body: "Hello"
+        },
+
+        data: {  //you can send only notification or only data(or include both)
+            key_screen: "",
+            id_screen: "",
+            notification_id: ""
+        }
+    };
+
+    fcm.send(message, function (err, response) {
+        if (err) {
+            // console.log("Something has gone wrong!");
+        } else {
+            //console.log("Successfully sent with response: ", response);
+        }
+    });
+}
+
 function sendMessageToUserKey(deviceId, message, key_screen, id_screen, title, notifi_id) {
     var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
         to: deviceId,
@@ -90,7 +116,6 @@ function sendMultiUserKey(result, res) {
     var title;
     var key_screen;
     var id_screen;
-    console.log(result);
     for (var i = 0; i < result['notification_list'].length; i++) {
         var bit = result['notification_list'][i];
         taget_id = taget_id + bit.user_id + '_';
@@ -167,7 +192,7 @@ module.exports.sendMultiUserKey = sendMultiUserKey;
 module.exports.sendMultiUser = sendMultiUser;
 module.exports.sendMessageToUser = sendMessageToUser;
 module.exports.sendMultiUserKeyIOS = sendMultiUserKeyIOS;
-
+module.exports.sendMessageToUserKey1 = sendMessageToUserKey1;
 
 
 
